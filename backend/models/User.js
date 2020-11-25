@@ -9,6 +9,30 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  positions: [
+    {
+      currency: {
+        type: String,
+        requires: true,
+      },
+      amount: {
+        type: String,
+        requires: true,
+      },
+      price_usd: {
+        type: Number,
+        required: true,
+      },
+      price_eur: {
+        type: Number,
+        required: true,
+      },
+      date: {
+        type: Date,
+        default: Date.now,
+      },
+    },
+  ],
   date: {
     type: Date,
     default: Date.now,

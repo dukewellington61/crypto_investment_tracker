@@ -1,43 +1,37 @@
 const express = require("express");
 const router = express.Router();
-// const auth = require("../../middleware/auth");
+const auth = require("../../middleware/auth");
 
-// const User = require("../../models/User");
+const User = require("../../models/User");
 
-// @route   POST api/position
-// @desc    Create Position
+// @route   POST api/positions
+// @desc    Create a position
 // @access  Private
-// router.post(
-//   "/position",
+router.post("/", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select("-password");
 
-//   async (req, res) => {
-//     try {
-//       // const user = await User.findById(req.user.id);
-//       //   await position.save();
-//       //   res.json(product);
-//     } catch (err) {
-//       console.error(err.message);
-//       res.status(500).send("Server error");
-//     }
-//   }
-// );
-
-// @route   POST api/position
-// @desc    Get Position
-// @access  Private
-router.get(
-  "/",
-
-  async (req, res) => {
-    try {
-      // const user = await User.findById(req.user.id);
-      //   res.json(product);
-      res.send("position route");
-    } catch (err) {
-      console.error(err.message);
-      res.status(500).send("Server error");
+    if (!user) {
+      return res.status(401).json({ msg: "User not found" });
     }
+
+    // Denormalization
+    // stores positions objects in users collection
+    const position = {
+      currency: req.body.currency,
+      amount: req.body.amount,
+      price_usd: req.body.price_usd,
+      price_eur: req.body.price_eur,
+    };
+
+    user.positions.unshift(position);
+
+    await user.save();
+
+    res.json(position);
+  } catch (err) {
+    res.status(500).send("Server Error");
   }
-);
+});
 
 module.exports = router;
