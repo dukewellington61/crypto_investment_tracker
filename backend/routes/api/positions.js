@@ -30,7 +30,7 @@ router.post("/", auth, async (req, res) => {
 
     res.json(position);
   } catch (err) {
-    res.status(500).send("Server Error");
+    res.status(500).json({ msg: "Server error" });
   }
 });
 

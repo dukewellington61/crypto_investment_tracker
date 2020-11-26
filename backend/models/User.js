@@ -27,6 +27,10 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         required: true,
       },
+      date_of_purchase: {
+        type: Date,
+        required: true,
+      },
       date: {
         type: Date,
         default: Date.now,

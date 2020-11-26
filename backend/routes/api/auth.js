@@ -11,7 +11,6 @@ const User = require("../../models/User");
 // @desc    Register user and update current shopping cart with user_id
 // @access  Public
 router.post("/signup", async (req, res) => {
-  console.log(req.body);
   const { email, password } = req.body;
 
   try {
@@ -21,9 +20,7 @@ router.post("/signup", async (req, res) => {
     });
 
     if (user) {
-      return res
-        .status(400)
-        .json({ errors: [{ msg: "User already exists " }] });
+      return res.status(400).json({ errors: { msg: "User already exists" } });
     }
 
     // Create new user
@@ -56,8 +53,7 @@ router.post("/signup", async (req, res) => {
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ errors: { msg: "Server error" } });
   }
 });
 
@@ -73,7 +69,7 @@ router.post("/login", async (req, res) => {
     });
 
     if (!user) {
-      return res.status(400).json({ errors: [{ msg: "Invalid credentials" }] });
+      return res.status(400).json({ errors: { msg: "Invalid credentials" } });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -99,8 +95,7 @@ router.post("/login", async (req, res) => {
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server error");
+    res.status(500).json({ errors: { msg: "Server error" } });
   }
 });
 
