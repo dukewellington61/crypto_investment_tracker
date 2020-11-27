@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
   },
   positions: [
     {
-      currency: {
+      crypto_currency: {
         type: String,
         requires: true,
       },
@@ -19,12 +19,12 @@ const UserSchema = new mongoose.Schema({
         type: String,
         requires: true,
       },
-      price_usd: {
+      price: {
         type: Number,
         required: true,
       },
-      price_eur: {
-        type: Number,
+      fiat_currency: {
+        type: String,
         required: true,
       },
       date_of_purchase: {

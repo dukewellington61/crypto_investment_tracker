@@ -18,10 +18,11 @@ router.post("/", auth, async (req, res) => {
     // Denormalization
     // stores positions objects in users collection
     const position = {
-      currency: req.body.currency,
+      crypto_currency: req.body.crypto_currency,
       amount: req.body.amount,
-      price_usd: req.body.price_usd,
-      price_eur: req.body.price_eur,
+      price: req.body.price,
+      fiat_currency: req.body.fiat_currency,
+      date_of_purchase: req.body.date_of_purchase,
     };
 
     user.positions.unshift(position);
@@ -30,7 +31,7 @@ router.post("/", auth, async (req, res) => {
 
     res.json(position);
   } catch (err) {
-    res.status(500).json({ msg: "Server error" });
+    res.status(500).json({ errors: { msg: err.message } });
   }
 });
 
