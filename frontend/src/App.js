@@ -81,6 +81,11 @@ const App = () => {
       setTimeout(() => setAlert({}), 5000);
     } else {
       setUser({ ...user, user: user.positions.push(returnValue.data) });
+      setAlert({
+        message: "Position added",
+        type: "success",
+      });
+      setTimeout(() => setAlert({}), 5000);
     }
   };
 

@@ -147,7 +147,7 @@
 /* @components/input/Positions.js */
 @media only screen and (min-width: 350px) {
   .input_field {
-    width: 75%;
+    width: 75% !important;
   }
   .form_container {
     padding-left: 1rem;
@@ -156,14 +156,18 @@
 
 @media only screen and (min-width: 600px) {
   .input_field {
-    width: 50%;
+    width: 50% !important;
   }
 }
 
 @media only screen and (min-width: 1200px) {
   .input_field {
-    width: 25%;
+    width: 25% !important;
   }
+}
+
+.input-group {
+  margin-bottom: 1rem;
 }
 
 .auth_fa-user {
