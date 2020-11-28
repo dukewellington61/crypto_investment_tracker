@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from "react";
+import React, { useState } from "react";
 
-const TotalbyCurrency = ({ user, getCurrentPrice }) => {
+const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
+  console.log(cryptoCurrencies);
   const getCurrencies = () => {
     let currencyArr = [];
     if (user.positions) {
@@ -33,39 +34,67 @@ const TotalbyCurrency = ({ user, getCurrentPrice }) => {
     return sum;
   };
 
+  const getCurrentPrice = (currency) => {
+    if (cryptoCurrencies.data) {
+      return cryptoCurrencies.data.find((el) => el.id === currency)
+        .current_price;
+    }
+  };
+
+  let currentValueTotal = 0;
+
   const getCurrentValue = (currency) => {
-    return getCurrentPrice(currency) * getAmount(currency);
+    const res = getCurrentPrice(currency) * getAmount(currency);
+    currentValueTotal += res;
+    return res;
+  };
+
+  const getBalance = (currency) =>
+    getCurrentValue(currency) - getTotal(currency);
+
+  const getTotalPurchase = () => {
+    let sum = 0;
+
+    if (user.positions)
+      user.positions.forEach((position) => (sum += position.price));
+
+    return sum;
   };
 
   return (
-    <Fragment>
-      <div>
-        <table className="table table-striped">
-          <thead>
+    <div>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Crypto</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Purchased for</th>
+            <th scope="col">Current Value</th>
+            <th scope="col">Balance</th>
+          </tr>
+        </thead>
+        {getCurrencies().map((currency) => (
+          <tbody>
             <tr>
-              <th scope="col">Crypto</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Total price at date(s) of purchase</th>
-              <th scope="col">Fiat</th>
-              <th scope="col">Current Value</th>
-              <th scope="col">Fiat</th>
+              <th scope="row">{currency}</th>
+              <td>{getAmount(currency).toFixed(3)}</td>
+              <td>{getTotal(currency).toFixed(2)}&euro;</td>
+              <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
+              <td>{getBalance(currency).toFixed(2)}&euro;</td>
             </tr>
-          </thead>
-          {getCurrencies().map((currency) => (
-            <tbody>
-              <tr>
-                <th scope="row">{currency}</th>
-                <td>{getAmount(currency).toFixed(3)}</td>
-                <td>{getTotal(currency).toFixed(2)}</td>
-                <td>{user.positions[1].fiat_currency}</td>
-                <td>{getCurrentValue(currency)}</td>
-                <td>{user.positions[1].fiat_currency}</td>
-              </tr>
-            </tbody>
-          ))}
-        </table>
-      </div>
-    </Fragment>
+          </tbody>
+        ))}
+        <tr>
+          <th scope="row"></th>
+          <td></td>
+          <td>{getTotalPurchase().toFixed(2)}&euro;</td>
+          <td>{(currentValueTotal / 2).toFixed(2)}&euro;</td>
+          <td>
+            {(currentValueTotal / 2 - getTotalPurchase()).toFixed(2)}&euro;
+          </td>
+        </tr>
+      </table>
+    </div>
   );
 };
 

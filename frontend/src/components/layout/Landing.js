@@ -1,28 +1,20 @@
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from "react";
 import Total from "../portfolio/Total";
 import TotalbyCurrency from "../portfolio/TotalbyCurrency";
-import CurrentPrice from "../portfolio/CurrentPrice";
+import { getCryptoCurriencies } from "../../actions/currencies";
 
 function Landing({ user }) {
-  const getCurrentPrice = async (currency) => {
-    try {
-      const res = await axios.get(
-        `https://api.coingecko.com/api/v3/coins/${currency}?localization=false&tickers=true&market_data=false&community_data=false&developer_data=false&sparkline=false`
-      );
-      let currentPrice = res.data.tickers.find((el) => el.target === "EUR")
-        .last;
-
-      return currentPrice;
-    } catch (err) {
-      console.log(err);
+  const [cryptoCurrencies, setCryptpCurrencies] = useState({});
+  useEffect(() => {
+    async function updateState() {
+      setCryptpCurrencies(await getCryptoCurriencies());
     }
-  };
-
+    updateState();
+  }, []);
   return (
     <div>
       <Total user={user} />
-      <TotalbyCurrency user={user} getCurrentPrice={getCurrentPrice} />
+      <TotalbyCurrency user={user} cryptoCurrencies={cryptoCurrencies} />
       {/* <CurrentPrice user={user} /> */}
     </div>
   );

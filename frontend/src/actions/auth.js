@@ -1,5 +1,4 @@
 import axios from "axios";
-import { loadUser } from "./user.js";
 
 // Register user
 export const register = async ({ email, password }) => {
@@ -40,10 +39,6 @@ export const login = async (email, password) => {
     return res;
   } catch (err) {
     return err;
-
-    // if (errors) {
-    //   return errors.forEach((error) => error);
-    // }
   }
 };
 
