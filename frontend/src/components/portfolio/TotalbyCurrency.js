@@ -1,19 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
+import { getCurrenciesNames } from "../../actions/aux";
 
 const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
-  console.log(cryptoCurrencies);
-  const getCurrencies = () => {
-    let currencyArr = [];
-    if (user.positions) {
-      user.positions.map((position) =>
-        currencyArr.push(position.crypto_currency)
-      );
-    }
-
-    // techsith's recommended way to remove duplicates from array (https://www.youtube.com/watch?v=dvPybpgk5Y4)
-    return [...new Set(currencyArr)];
-  };
-
   const getTotal = (currency) => {
     let sum = 0;
     user.positions.map((position) => {
@@ -73,7 +61,7 @@ const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
             <th scope="col">Balance</th>
           </tr>
         </thead>
-        {getCurrencies().map((currency) => (
+        {getCurrenciesNames(user).map((currency) => (
           <tbody>
             <tr>
               <th scope="row">{currency}</th>

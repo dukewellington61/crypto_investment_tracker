@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from "react";
 import Total from "../portfolio/Total";
-import TotalbyCurrency from "../portfolio/TotalbyCurrency";
+import { getCurrenciesNames } from "../../actions/aux";
 import { getCryptoCurriencies } from "../../actions/currencies";
+import TotalbyCurrency from "../portfolio/TotalbyCurrency";
 
 function Landing({ user }) {
   const [cryptoCurrencies, setCryptpCurrencies] = useState({});
+
   useEffect(() => {
     async function updateState() {
-      setCryptpCurrencies(await getCryptoCurriencies());
+      if (user._id) {
+        const currencyNames = getCurrenciesNames(user);
+
+        const crypto = await getCryptoCurriencies(currencyNames);
+
+        setCryptpCurrencies(crypto);
+      }
+    }
+    updateState();
+  }, [user]);
+
+  useEffect(() => {
+    async function updateState() {
+      if (user) {
+      }
     }
     updateState();
   }, []);

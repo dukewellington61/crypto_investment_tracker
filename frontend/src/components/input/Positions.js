@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Positions = ({ makePosition }) => {
+const Positions = ({ makePosition, loadUser }) => {
   const [formData, setFormData] = useState({
     crypto_currency: "",
     amount: "",
@@ -13,13 +13,13 @@ const Positions = ({ makePosition }) => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     // dropdown menu doesn't send default value (EUR) because onChange fires only on user input
     // in order to send a value (EUR or USD) it had to be actively selected everytime the user wants to enter a new position
     formData.fiat_currency = e.target.querySelector("select").value;
 
-    makePosition(formData);
+    await makePosition(formData);
     setFormData({
       crypto_currency: "",
       amount: "",
@@ -27,6 +27,7 @@ const Positions = ({ makePosition }) => {
       fiat_currency: "",
       date_of_purchase: "",
     });
+    loadUser();
   };
 
   return (

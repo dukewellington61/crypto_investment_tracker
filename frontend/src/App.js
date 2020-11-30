@@ -1,7 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
-import { loadUser } from "./actions/user";
+import { getUser } from "./actions/user";
 import { register } from "./actions/auth";
 import { createPosition } from "./actions/positions";
 
@@ -24,13 +24,7 @@ const App = () => {
   const [alert, setAlert] = useState({});
 
   useEffect(() => {
-    async function updateState() {
-      if (localStorage.crypto_token) {
-        setUser(await loadUser());
-        setLogedin(true);
-      }
-    }
-    updateState();
+    loadUser();
   }, []);
 
   const signin = async (email, password) => {
@@ -80,12 +74,28 @@ const App = () => {
       });
       setTimeout(() => setAlert({}), 5000);
     } else {
-      setUser({ ...user, user: user.positions.push(returnValue.data) });
       setAlert({
         message: "Position added",
         type: "success",
       });
       setTimeout(() => setAlert({}), 5000);
+    }
+  };
+
+  const loadUser = async () => {
+    if (localStorage.crypto_token) {
+      const returnValue = await getUser();
+      if (returnValue instanceof Error) {
+        setAlert({
+          message: returnValue.response.data.errors.msg,
+          type: "danger",
+        });
+        setTimeout(() => setAlert({}), 5000);
+      } else {
+        setUser(returnValue);
+        setLogedin(true);
+        console.log(returnValue);
+      }
     }
   };
 
@@ -110,7 +120,9 @@ const App = () => {
             <Route
               exact
               path="/positions"
-              render={() => <Positions makePosition={makePosition} />}
+              render={() => (
+                <Positions makePosition={makePosition} loadUser={loadUser} />
+              )}
             />
           )}
         </Switch>
