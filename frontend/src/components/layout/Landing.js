@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Total from "../portfolio/Total";
 import { getCurrenciesNames } from "../../actions/aux";
 import { getCryptoCurriencies } from "../../actions/currencies";
-import TotalbyCurrency from "../portfolio/TotalbyCurrency";
+import Overview from "../portfolio/Overview";
 
 function Landing({ user }) {
   const [cryptoCurrencies, setCryptpCurrencies] = useState({});
@@ -30,7 +30,7 @@ function Landing({ user }) {
   return (
     <div>
       <Total user={user} />
-      <TotalbyCurrency user={user} cryptoCurrencies={cryptoCurrencies} />
+      <Overview user={user} cryptoCurrencies={cryptoCurrencies} />
       {/* <CurrentPrice user={user} /> */}
     </div>
   );

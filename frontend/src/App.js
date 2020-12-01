@@ -10,6 +10,7 @@ import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 import Positions from "./components/input/Positions";
+import Charts from "./components/portfolio/Charts";
 
 import Alert from "./components/layout/Alert";
 
@@ -106,6 +107,7 @@ const App = () => {
         <Alert alert={alert} />
         <Switch>
           <Route exact path="/" render={() => <Landing user={user} />} />
+          <Route exact path="/charts" render={() => <Charts />} />
           <Route
             exact
             path="/login"

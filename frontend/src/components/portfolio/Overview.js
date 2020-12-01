@@ -1,7 +1,8 @@
 import React from "react";
 import { getCurrenciesNames } from "../../actions/aux";
+import { Link } from "react-router-dom";
 
-const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
+const Overview = ({ user, cryptoCurrencies }) => {
   const getTotal = (currency) => {
     let sum = 0;
     user.positions.map((position) => {
@@ -61,17 +62,27 @@ const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
             <th scope="col">Balance</th>
           </tr>
         </thead>
-        {getCurrenciesNames(user).map((currency) => (
-          <tbody>
+        <tbody>
+          {getCurrenciesNames(user).map((currency) => (
             <tr>
-              <th scope="row">{currency}</th>
+              <Link
+                to={{
+                  pathname: "/charts",
+                  state: {
+                    currency,
+                  },
+                }}
+              >
+                <th scope="row">{currency}</th>
+              </Link>
+
               <td>{getAmount(currency).toFixed(3)}</td>
               <td>{getTotal(currency).toFixed(2)}&euro;</td>
               <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
               <td>{getBalance(currency).toFixed(2)}&euro;</td>
             </tr>
-          </tbody>
-        ))}
+          ))}
+        </tbody>
         <tr>
           <th scope="row"></th>
           <td></td>
@@ -86,4 +97,4 @@ const TotalbyCurrency = ({ user, cryptoCurrencies }) => {
   );
 };
 
-export default TotalbyCurrency;
+export default Overview;
