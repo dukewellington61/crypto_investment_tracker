@@ -18,7 +18,7 @@ const Navbar = ({ signout, logedin }) => {
 
       <div id="nav_item_container">
         {logedin && (
-          <Link className="nav_items" to="/positions">
+          <Link className="nav_items" to="/input">
             positions
           </Link>
         )}

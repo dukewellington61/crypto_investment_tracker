@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Positions = ({ makePosition, loadUser }) => {
+const PositionInput = ({ makePosition, loadUser }) => {
   const [formData, setFormData] = useState({
     crypto_currency: "",
     amount: "",
@@ -98,4 +98,4 @@ const Positions = ({ makePosition, loadUser }) => {
   );
 };
 
-export default Positions;
+export default PositionInput;

@@ -10,3 +10,11 @@ export const getCurrenciesNames = (user) => {
 
   return [...new Set(currencyArr)];
 };
+
+export const getCurrencyPositions = (user, currency) => {
+  if (user.positions) {
+    return user.positions.filter(
+      (position) => position.crypto_currency === currency
+    );
+  }
+};

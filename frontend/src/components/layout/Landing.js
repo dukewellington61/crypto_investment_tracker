@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Total from "../portfolio/Total";
 import { getCurrenciesNames } from "../../actions/aux";
 import { getCryptoCurriencies } from "../../actions/currencies";
 import Overview from "../portfolio/Overview";
@@ -29,9 +28,7 @@ function Landing({ user }) {
   }, []);
   return (
     <div>
-      <Total user={user} />
       <Overview user={user} cryptoCurrencies={cryptoCurrencies} />
-      {/* <CurrentPrice user={user} /> */}
     </div>
   );
 }

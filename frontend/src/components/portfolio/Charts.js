@@ -1,19 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { getMarketCharts } from "../../actions/currencies";
+import MarketChartPriceRange from "./MarketChartPriceRange";
 
 const Charts = () => {
   let data = useLocation();
 
   const [marketChart, setMarketChart] = useState({});
 
+  // const [positions, setPostions] = useState([{}]);
+
   useEffect(() => {
-    const updateMarketChart = async () => {
-      const chartData = await getMarketCharts(data.state.currency);
+    const updateStates = async () => {
+      console.log(data.state.currency);
+      const chartData = await getMarketCharts(
+        data.state.currency,
+        data.state.date_of_purchase
+      );
       setMarketChart(chartData);
+      // let positions = getCurrencyPositions(
+      //   data.state.user,
+      //   data.state.currency
+      // );
+
+      // setPostions(positions);
     };
 
-    updateMarketChart();
+    updateStates();
   }, []);
 
   function isEmpty(obj) {
@@ -24,13 +37,12 @@ const Charts = () => {
     <div>Loading ...</div>
   ) : (
     <div>
-      {!isEmpty(marketChart) &&
-        marketChart.data.prices.map((el) => (
-          <div style={{ display: "flex" }}>
-            <p>{el[0]}</p>
-            <p>{el[1]}</p>
-          </div>
-        ))}
+      <Fragment>
+        <MarketChartPriceRange
+          marketChart={marketChart}
+          amount={data.state.amount}
+        />
+      </Fragment>
     </div>
   );
 };

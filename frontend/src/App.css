@@ -173,3 +173,15 @@
 .auth_fa-user {
   position: relative !important;
 }
+
+/* @components/portfolio/Position.js */
+#position {
+  display: flex;
+  margin: 1rem;
+  border-style: solid;
+  border-color: black;
+}
+
+#position > div {
+  margin: 1rem;
+}

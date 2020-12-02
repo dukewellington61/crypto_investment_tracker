@@ -9,7 +9,9 @@ import Navbar from "./components/navbar/Navbar";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Positions from "./components/input/Positions";
+import Position from "./components/portfolio/Position";
+
+import PositionInput from "./components/input/PositionInput";
 import Charts from "./components/portfolio/Charts";
 
 import Alert from "./components/layout/Alert";
@@ -107,6 +109,7 @@ const App = () => {
         <Alert alert={alert} />
         <Switch>
           <Route exact path="/" render={() => <Landing user={user} />} />
+          <Route exact path="/position" render={() => <Position />} />
           <Route exact path="/charts" render={() => <Charts />} />
           <Route
             exact
@@ -121,9 +124,12 @@ const App = () => {
           {logedin && (
             <Route
               exact
-              path="/positions"
+              path="/input"
               render={() => (
-                <Positions makePosition={makePosition} loadUser={loadUser} />
+                <PositionInput
+                  makePosition={makePosition}
+                  loadUser={loadUser}
+                />
               )}
             />
           )}

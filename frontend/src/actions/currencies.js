@@ -23,16 +23,35 @@ const getNameString = async (currencyNamesArr) => {
   return nameString;
 };
 
-export const getMarketCharts = async (currency) => {
+export const getMarketCharts = async (currency, date_of_purchase) => {
+  const from = new Date(date_of_purchase).getTime() / 1000;
+  const to = new Date().getTime() / 1000;
+
+  const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
+
+  console.log(urlString);
+
+  try {
+    const res = await axios.get(urlString);
+
+    return res;
+  } catch (err) {
+    return err;
+  }
+};
+
+export const getMarketChartsCrypto = async (currency) => {
   const user = await getUser();
   const fromDate = await getFromDate(user);
   const from = new Date(fromDate).getTime() / 1000;
   const to = new Date().getTime() / 1000;
 
-  const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
+  const urlString = `https://api.coingecko.com/api/v3/coins/ethereum/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
 
   try {
     const res = await axios.get(urlString);
+
+    console.log(res);
 
     return res;
   } catch (err) {
@@ -47,7 +66,7 @@ const getFromDate = (user) => {
 
   let oldestDate = dates.sort(function (a, b) {
     return Date.parse(a) > Date.parse(b);
-  })[0];
+  });
 
-  return oldestDate;
+  return oldestDate[oldestDate.length - 1];
 };

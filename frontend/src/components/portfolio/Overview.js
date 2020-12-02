@@ -1,6 +1,6 @@
 import React from "react";
-import { getCurrenciesNames } from "../../actions/aux";
 import { Link } from "react-router-dom";
+import { getCurrenciesNames } from "../../actions/aux";
 
 const Overview = ({ user, cryptoCurrencies }) => {
   const getTotal = (currency) => {
@@ -67,9 +67,10 @@ const Overview = ({ user, cryptoCurrencies }) => {
             <tr>
               <Link
                 to={{
-                  pathname: "/charts",
+                  pathname: "/position",
                   state: {
                     currency,
+                    user,
                   },
                 }}
               >
