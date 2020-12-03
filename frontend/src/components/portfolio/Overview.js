@@ -60,6 +60,7 @@ const Overview = ({ user, cryptoCurrencies }) => {
             <th scope="col">Purchased for</th>
             <th scope="col">Current Value</th>
             <th scope="col">Balance</th>
+            <th scope="col">ROI</th>
           </tr>
         </thead>
         <tbody>
@@ -68,9 +69,10 @@ const Overview = ({ user, cryptoCurrencies }) => {
               <Link
                 to={{
                   pathname: "/position",
+                  current_price: getCurrentPrice(currency),
                   state: {
-                    currency,
-                    user,
+                    currency: currency,
+                    user: user,
                   },
                 }}
               >
@@ -81,6 +83,23 @@ const Overview = ({ user, cryptoCurrencies }) => {
               <td>{getTotal(currency).toFixed(2)}&euro;</td>
               <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
               <td>{getBalance(currency).toFixed(2)}&euro;</td>
+              <td>
+                <Link
+                  to={{
+                    pathname: "/position_roi_chart",
+                    state: {
+                      currency: currency,
+                      user: user,
+                    },
+                  }}
+                >
+                  {(
+                    (getCurrentValue(currency) * 100) / getTotal(currency) -
+                    100
+                  ).toFixed(0)}
+                  %
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -88,9 +107,16 @@ const Overview = ({ user, cryptoCurrencies }) => {
           <th scope="row"></th>
           <td></td>
           <td>{getTotalPurchase().toFixed(2)}&euro;</td>
-          <td>{(currentValueTotal / 2).toFixed(2)}&euro;</td>
+          <td>{(currentValueTotal / 3).toFixed(2)}&euro;</td>
           <td>
-            {(currentValueTotal / 2 - getTotalPurchase()).toFixed(2)}&euro;
+            {(currentValueTotal / 3 - getTotalPurchase()).toFixed(2)}&euro;
+          </td>
+          <td>
+            {(
+              ((currentValueTotal / 3) * 100) / getTotalPurchase() -
+              100
+            ).toFixed(0)}
+            %
           </td>
         </tr>
       </table>

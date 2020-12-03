@@ -9,10 +9,13 @@ import Navbar from "./components/navbar/Navbar";
 import Landing from "./components/layout/Landing";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
-import Position from "./components/portfolio/Position";
 
 import PositionInput from "./components/input/PositionInput";
-import Charts from "./components/portfolio/Charts";
+
+import Position from "./components/portfolio/Position";
+import PositionChart from "./components/portfolio/PositionChart";
+
+import PositionRoiChart from "./components/portfolio/PositionRoiChart";
 
 import Alert from "./components/layout/Alert";
 
@@ -110,7 +113,17 @@ const App = () => {
         <Switch>
           <Route exact path="/" render={() => <Landing user={user} />} />
           <Route exact path="/position" render={() => <Position />} />
-          <Route exact path="/charts" render={() => <Charts />} />
+          <Route
+            exact
+            path="/position_chart"
+            render={() => <PositionChart />}
+          />
+          <Route
+            exact
+            path="/position_roi_chart"
+            render={() => <PositionRoiChart />}
+          />
+
           <Route
             exact
             path="/login"

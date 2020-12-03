@@ -1,14 +1,12 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { getMarketCharts } from "../../actions/currencies";
-import MarketChartPriceRange from "./MarketChartPriceRange";
+import PositionChartDiagram from "./PositionChartDiagram";
 
-const Charts = () => {
+const PositionChart = () => {
   let data = useLocation();
 
   const [marketChart, setMarketChart] = useState({});
-
-  // const [positions, setPostions] = useState([{}]);
 
   useEffect(() => {
     const updateStates = async () => {
@@ -18,12 +16,6 @@ const Charts = () => {
         data.state.date_of_purchase
       );
       setMarketChart(chartData);
-      // let positions = getCurrencyPositions(
-      //   data.state.user,
-      //   data.state.currency
-      // );
-
-      // setPostions(positions);
     };
 
     updateStates();
@@ -38,7 +30,7 @@ const Charts = () => {
   ) : (
     <div>
       <Fragment>
-        <MarketChartPriceRange
+        <PositionChartDiagram
           marketChart={marketChart}
           amount={data.state.amount}
         />
@@ -47,4 +39,4 @@ const Charts = () => {
   );
 };
 
-export default Charts;
+export default PositionChart;
