@@ -10,7 +10,6 @@ const PositionChart = () => {
 
   useEffect(() => {
     const updateStates = async () => {
-      console.log(data.state.currency);
       const chartData = await getMarketCharts(
         data.state.currency,
         data.state.date_of_purchase

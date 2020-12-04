@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { getCurrenciesNames } from "../../actions/aux";
 
-const Overview = ({ user, cryptoCurrencies }) => {
+const Overview = ({ user, cryptoCurrencies, logedin }) => {
   const getTotal = (currency) => {
     let sum = 0;
     user.positions.map((position) => {
@@ -44,8 +44,7 @@ const Overview = ({ user, cryptoCurrencies }) => {
   const getTotalPurchase = () => {
     let sum = 0;
 
-    if (user.positions)
-      user.positions.forEach((position) => (sum += position.price));
+    if (logedin) user.positions.forEach((position) => (sum += position.price));
 
     return sum;
   };
@@ -64,44 +63,45 @@ const Overview = ({ user, cryptoCurrencies }) => {
           </tr>
         </thead>
         <tbody>
-          {getCurrenciesNames(user).map((currency) => (
-            <tr>
-              <Link
-                to={{
-                  pathname: "/position",
-                  current_price: getCurrentPrice(currency),
-                  state: {
-                    currency: currency,
-                    user: user,
-                  },
-                }}
-              >
-                <th scope="row">{currency}</th>
-              </Link>
-
-              <td>{getAmount(currency).toFixed(3)}</td>
-              <td>{getTotal(currency).toFixed(2)}&euro;</td>
-              <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
-              <td>{getBalance(currency).toFixed(2)}&euro;</td>
-              <td>
+          {logedin &&
+            getCurrenciesNames(user).map((currency) => (
+              <tr>
                 <Link
                   to={{
-                    pathname: "/position_roi_chart",
+                    pathname: "/position",
+                    current_price: getCurrentPrice(currency),
                     state: {
                       currency: currency,
                       user: user,
                     },
                   }}
                 >
-                  {(
-                    (getCurrentValue(currency) * 100) / getTotal(currency) -
-                    100
-                  ).toFixed(0)}
-                  %
+                  <th scope="row">{currency}</th>
                 </Link>
-              </td>
-            </tr>
-          ))}
+
+                <td>{getAmount(currency).toFixed(3)}</td>
+                <td>{getTotal(currency).toFixed(2)}&euro;</td>
+                <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
+                <td>{getBalance(currency).toFixed(2)}&euro;</td>
+                <td>
+                  <Link
+                    to={{
+                      pathname: "/position_roi_chart",
+                      state: {
+                        currency: currency,
+                        user: user,
+                      },
+                    }}
+                  >
+                    {(
+                      (getCurrentValue(currency) * 100) / getTotal(currency) -
+                      100
+                    ).toFixed(0)}
+                    %
+                  </Link>
+                </td>
+              </tr>
+            ))}
         </tbody>
         <tr>
           <th scope="row"></th>

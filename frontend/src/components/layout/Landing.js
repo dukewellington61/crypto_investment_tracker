@@ -3,32 +3,29 @@ import { getCurrenciesNames } from "../../actions/aux";
 import { getCryptoCurriencies } from "../../actions/currencies";
 import Overview from "../portfolio/Overview";
 
-function Landing({ user }) {
-  const [cryptoCurrencies, setCryptpCurrencies] = useState({});
+function Landing({ user, logedin }) {
+  const [cryptoCurrencies, setCryptoCurrencies] = useState({});
 
   useEffect(() => {
     async function updateState() {
-      if (user._id) {
+      if (logedin) {
         const currencyNames = getCurrenciesNames(user);
 
         const crypto = await getCryptoCurriencies(currencyNames);
 
-        setCryptpCurrencies(crypto);
+        setCryptoCurrencies(crypto);
       }
     }
     updateState();
-  }, [user]);
+  }, [user, logedin]);
 
-  useEffect(() => {
-    async function updateState() {
-      if (user) {
-      }
-    }
-    updateState();
-  }, []);
   return (
     <div>
-      <Overview user={user} cryptoCurrencies={cryptoCurrencies} />
+      <Overview
+        user={user}
+        cryptoCurrencies={cryptoCurrencies}
+        logedin={logedin}
+      />
     </div>
   );
 }

@@ -42,8 +42,7 @@ const App = () => {
       });
       setTimeout(() => setAlert({}), 5000);
     } else {
-      setLogedin(true);
-      setUser(await loadUser());
+      loadUser();
     }
   };
 
@@ -65,8 +64,7 @@ const App = () => {
         });
         setTimeout(() => setAlert({}), 5000);
       } else {
-        setLogedin(true);
-        setUser(await loadUser());
+        loadUser();
       }
     }
   };
@@ -100,7 +98,6 @@ const App = () => {
       } else {
         setUser(returnValue);
         setLogedin(true);
-        console.log(returnValue);
       }
     }
   };
@@ -111,7 +108,11 @@ const App = () => {
         <Navbar signout={signout} logedin={logedin} />
         <Alert alert={alert} />
         <Switch>
-          <Route exact path="/" render={() => <Landing user={user} />} />
+          <Route
+            exact
+            path="/"
+            render={() => <Landing user={user} logedin={logedin} />}
+          />
           <Route exact path="/position" render={() => <Position />} />
           <Route
             exact
