@@ -18,3 +18,16 @@ export const getCurrencyPositions = (user, currency) => {
     );
   }
 };
+
+export const getAmount = (user, currency) => {
+  let sum = 0;
+  if (user.positions) {
+    user.positions.map((position) => {
+      if (position.crypto_currency === currency) {
+        sum += parseFloat(position.amount);
+      }
+    });
+  }
+
+  return sum;
+};

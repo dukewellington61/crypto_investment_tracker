@@ -1,23 +1,22 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 
-function PositionChartDiagram({ marketChart, amount, currency }) {
-  const getLabels = () => {
+function PositionRoiChartDiagram({ marketChart, amount, currency }) {
+  //   console.log(marketChart);
+  const getDates = () => {
     let timeArr = [];
-    if (marketChart.data) {
-      marketChart.data.prices.forEach((el) => {
-        const time = new Date(el[0]);
-        timeArr.push(time);
-      });
+    if (marketChart.length > 0) {
+      marketChart.forEach((el) => timeArr.push(el[2]));
+      return timeArr;
     }
-
-    return timeArr;
   };
 
+  //legacy
   const getData = () => {
     let data = [];
-    if (marketChart.data) {
-      marketChart.data.prices.forEach((el) => data.push(el[1]));
+    if (marketChart.length > 0) {
+      marketChart.forEach((el) => data.push(el[1]));
+      //   console.log(data);
       return data;
     }
   };
@@ -25,6 +24,8 @@ function PositionChartDiagram({ marketChart, amount, currency }) {
   const getPrice = () => {
     const priceArr = getData();
     const calcPricesArr = priceArr.map((el) => el * amount);
+    console.log(calcPricesArr);
+    console.log(amount);
     return calcPricesArr;
   };
 
@@ -32,7 +33,7 @@ function PositionChartDiagram({ marketChart, amount, currency }) {
     <div>
       <Line
         data={{
-          labels: getLabels(),
+          labels: getDates(),
           datasets: [
             {
               label: currency,
@@ -47,4 +48,4 @@ function PositionChartDiagram({ marketChart, amount, currency }) {
   );
 }
 
-export default PositionChartDiagram;
+export default PositionRoiChartDiagram;

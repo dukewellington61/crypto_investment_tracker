@@ -122,7 +122,7 @@ const App = () => {
           <Route
             exact
             path="/position_roi_chart"
-            render={() => <PositionRoiChart />}
+            render={() => <PositionRoiChart user={user} logedin={logedin} />}
           />
 
           <Route

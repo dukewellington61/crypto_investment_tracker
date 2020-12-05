@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { getCurrenciesNames } from "../../actions/aux";
+import { getAmount } from "../../actions/aux";
 
 const Overview = ({ user, cryptoCurrencies, logedin }) => {
   const getTotal = (currency) => {
@@ -8,16 +9,6 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
     user.positions.map((position) => {
       if (position.crypto_currency === currency) {
         sum += position.price;
-      }
-    });
-    return sum;
-  };
-
-  const getAmount = (currency) => {
-    let sum = 0;
-    user.positions.map((position) => {
-      if (position.crypto_currency === currency) {
-        sum += parseFloat(position.amount);
       }
     });
     return sum;
@@ -33,7 +24,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
   let currentValueTotal = 0;
 
   const getCurrentValue = (currency) => {
-    const res = getCurrentPrice(currency) * getAmount(currency);
+    const res = getCurrentPrice(currency) * getAmount(user, currency);
     currentValueTotal += res;
     return res;
   };
@@ -79,7 +70,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                   <th scope="row">{currency}</th>
                 </Link>
 
-                <td>{getAmount(currency).toFixed(3)}</td>
+                <td>{getAmount(user, currency).toFixed(3)}</td>
                 <td>{getTotal(currency).toFixed(2)}&euro;</td>
                 <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
                 <td>{getBalance(currency).toFixed(2)}&euro;</td>

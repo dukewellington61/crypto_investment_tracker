@@ -40,9 +40,9 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
   }
 };
 
-export const getMarketChartsCrypto = async (currency) => {
-  const user = await getUser();
-  const fromDate = await getFromDate(user);
+export const getMarketChartsCrypto = async (user, currency) => {
+  // const user = await getUser();
+  const fromDate = await getFromDate(user, currency);
   const from = new Date(fromDate).getTime() / 1000;
   const to = new Date().getTime() / 1000;
 
@@ -51,18 +51,27 @@ export const getMarketChartsCrypto = async (currency) => {
   try {
     const res = await axios.get(urlString);
 
-    console.log(res);
+    const resTransformed = await addDateToArr(res.data.prices);
 
-    return res;
+    console.log(resTransformed);
+
+    return resTransformed;
   } catch (err) {
     return err;
   }
 };
 
-const getFromDate = (user) => {
+const getFromDate = (user, currency) => {
   let dates = [];
 
-  user.positions.forEach((position) => dates.push(position.date_of_purchase));
+  currency
+    ? user.positions.forEach((position) => {
+        if (position.crypto_currency === currency)
+          dates.push(position.date_of_purchase);
+      })
+    : user.positions.forEach((position) =>
+        dates.push(position.date_of_purchase)
+      );
 
   let oldestDate = dates.sort(function (a, b) {
     return Date.parse(a) > Date.parse(b);
@@ -70,3 +79,6 @@ const getFromDate = (user) => {
 
   return oldestDate[oldestDate.length - 1];
 };
+
+const addDateToArr = (arr) =>
+  arr.map((el, index) => [...arr[index], (arr[index][0] = new Date(el[0]))]);
