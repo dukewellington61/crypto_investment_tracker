@@ -55,11 +55,11 @@ const purchaseObj = {
   1606935966368: -600,
 };
 
-// const arrMut = arr.map((el, index) => {
-//   return arr[index][0] > 1606849965374
-//     ? [...arr, (arr[index][1] = el[1] + 1200)]
-//     : [...arr, (arr[index][1] = el[1])];
-// });
+const arrMut = arr.map((el, index) => {
+  return arr[index][0] > 1606849965374
+    ? [...arr, (arr[index][1] = el[1] + 1200)]
+    : [...arr, (arr[index][1] = el[1])];
+});
 
 // const arrMut = arr.map((el, index) => {
 //   arr[index][0] > 1606849965374
@@ -67,4 +67,4 @@ const purchaseObj = {
 //     : [...arr, (arr[index][1] = el[1])];
 // });
 
-// console.log(arrMut);
+console.log(arrMut);

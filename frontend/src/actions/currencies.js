@@ -51,11 +51,13 @@ export const getMarketChartsCrypto = async (user, currency) => {
   try {
     const res = await axios.get(urlString);
 
-    const resTransformed = await addDateToArr(res.data.prices);
+    // const resTransformed = await addDateToArr(res.data.prices);
 
-    console.log(resTransformed);
+    // console.log(res.data.prices);
 
-    return resTransformed;
+    // return resTransformed;
+
+    return res.data.prices;
   } catch (err) {
     return err;
   }
@@ -80,5 +82,5 @@ const getFromDate = (user, currency) => {
   return oldestDate[oldestDate.length - 1];
 };
 
-const addDateToArr = (arr) =>
-  arr.map((el, index) => [...arr[index], (arr[index][0] = new Date(el[0]))]);
+// const addDateToArr = (arr) =>
+//   arr.map((el, index) => [...arr[index], (arr[index][0] = new Date(el[0]))]);

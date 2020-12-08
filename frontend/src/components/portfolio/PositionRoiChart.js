@@ -17,7 +17,7 @@ const PositionRoiChart = ({ user, logedin }) => {
           data.state.currency
         );
         setMarketChart(chartData);
-        console.log(marketChart);
+        // console.log(marketChart);
       }
     };
 
@@ -30,6 +30,7 @@ const PositionRoiChart = ({ user, logedin }) => {
     <div>
       <Fragment>
         <PositionRoiChartDiagram
+          positions={user.positions}
           marketChart={marketChart}
           amount={getAmount(user, data.state.currency)}
           currency={data.state.currency}
