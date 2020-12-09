@@ -32,7 +32,6 @@ const PositionRoiChart = ({ user, logedin }) => {
         <PositionRoiChartDiagram
           positions={user.positions}
           marketChart={marketChart}
-          amount={getAmount(user, data.state.currency)}
           currency={data.state.currency}
         />
       </Fragment>

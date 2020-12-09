@@ -1,41 +1,16 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { getAmount } from "../../actions/aux";
 
-const PositionRoiChartDiagram = ({
-  positions,
-  marketChart,
-  amount,
-  currency,
-}) => {
+const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   // console.log(marketChart);
 
-  // console.log(marketChartCopy);
-
-  // const getDates = () => {
-  //   let timeArr = [];
-  //   if (marketChart.length > 0) {
-  //     cumulativeValueInvestment().forEach((el) => timeArr.push(el[2]));
-  //     return timeArr;
-  //   }
-  // };
-
-  // legacy;
   // const getData = () => {
   //   let data = [];
   //   if (marketChart.length > 0) {
   //     cumulativeValueInvestment().forEach((el) => data.push(el[1]));
-  //     //   console.log(data);
+
   //     return data;
   //   }
-  // };
-
-  // const getPrice = () => {
-  //   const priceArr = getData();
-  //   const calcPricesArr = priceArr.map((el) => el * amount);
-  //   // console.log(calcPricesArr);
-  //   // console.log(amount);
-  //   return calcPricesArr;
   // };
 
   const getAmountAndDate = () => {
@@ -59,7 +34,6 @@ const PositionRoiChartDiagram = ({
       element > 0
         ? (sort[element][1] = sort[element][1] + sort[element - 1][1])
         : (sort[element][1] = sort[element][1]);
-      // console.log(sort[element]);
     }
 
     let uniqueElArr = [];
@@ -71,68 +45,69 @@ const PositionRoiChartDiagram = ({
     );
 
     return uniqueElArr;
-
-    // sort.filter((el, i, arr) => (i > 0 ? el[0] != arr[i - 1][0] : null));
   };
-
-  console.log(getAmountAndDate());
 
   let marketChartCopy = JSON.parse(JSON.stringify(marketChart));
 
+  let valueArr = [];
+  let timeStampArr = [];
+
   const cumulativeValueInvestment = () => {
-    // return marketChartCopy.map((array, i) =>
-    //   getAmountAndDate().map((el) => {
-    //     if (el[0] > array[0]) return [...marketChartCopy, (array[1] *= el[1])];
-    //   })
-    // );
+    getAmountAndDate().forEach((array1) => {
+      marketChartCopy.forEach((array2, index) => {
+        if (array1[0] < array2[0]) {
+          valueArr[index] = array2[1] * array1[1];
+          if (index % 3 === 0) {
+            timeStampArr[index] = array2[2];
+          } else {
+            timeStampArr[index] = " ";
+          }
+          // counter++;
+          // console.log(
+          //   // counter +
+          //   //   "**" +
+          //   array2[2] +
+          //     "**" +
+          //     array2[1] * array1[1] +
+          //     "**" +
+          //     array2[1] +
+          //     "**" +
+          //     array1[1]
+          // );
+        }
+      });
+    });
 
-    // for (let i = 0; i < marketChartCopy.length; i++) {
-    //   for (let j = 0; j < getAmountAndDate().length; j++) {
-    //     if (getAmountAndDate()[j][0] > marketChartCopy[i][0]) {
-    //       marketChartCopy[i][1] =
-    //         marketChartCopy[i][1] * getAmountAndDate()[j][1];
-    //     }
-    //   }
-    // }
-
-    // return marketChartCopy;
-
-    // marketChartCopy.forEach((array, i) =>
-    //   getAmountAndDate().forEach((el) =>
-    //     el[0] > array[0] ? (marketChartCopy[i][1] = array[1] * el[1]) : null
-    //   )
-    // );
-
-    getAmountAndDate().forEach((array1) =>
-      marketChartCopy.forEach((array2, j) =>
-        array1[0] > array2[0]
-          ? (marketChartCopy[j][1] = array2[1] * array1[1])
-          : null
-      )
-    );
-
-    // return marketChartCopy;
+    return marketChartCopy;
   };
 
   cumulativeValueInvestment();
 
-  console.log(marketChartCopy);
+  // console.log(marketChartCopy);
+  // console.log(valueArr);
+  // console.log(timeStampArr);
+
+  // const getDates = () => {
+  //   let timeArr = [];
+  //   marketChartCopy.forEach((el) => timeArr.push(el[0]));
+  //   return timeArr;
+  // };
 
   return (
     <div>
-      {/* <Line
+      <Line
         data={{
-          labels: getDates(),
+          labels: timeStampArr,
           datasets: [
             {
               label: currency,
-              data: getData(),
+              data: valueArr,
             },
           ],
         }}
         height={400}
         width={600}
-      /> */}
+      />
     </div>
   );
 };
