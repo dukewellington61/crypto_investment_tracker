@@ -14,6 +14,7 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   // };
 
   const getAmountAndDate = () => {
+    // extracts amount of coins and date of purchase
     let AmountAndDateArr = [];
 
     positions.forEach((el) => {
@@ -26,25 +27,34 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
       }
     });
 
+    // sorts AmountAndDateArr by purchase date beginning with the oldest
     let sort = AmountAndDateArr.sort(function (a, b) {
       return a[0] - b[0];
     });
 
+    // adds amount of coins in array so that each amount is the sum of itself + the previous amount
     for (const element in sort) {
       element > 0
         ? (sort[element][1] = sort[element][1] + sort[element - 1][1])
         : (sort[element][1] = sort[element][1]);
     }
 
-    let uniqueElArr = [];
-    sort.forEach((el, i, arr) =>
-      (i < arr.length - 1 && el[0] != arr[i + 1][0]) ||
-      (i > 0 && el[0] != arr[i - 1][0])
-        ? uniqueElArr.push(el)
-        : null
-    );
+    // removes elements from array which's purchase date is the same like the purchase date of the following element
+    if (sort.length > 1) {
+      let uniqueElArr = [];
+      sort.forEach((el, i, arr) =>
+        (uniqueElArr.length > 1 &&
+          i < arr.length - 1 &&
+          el[0] != arr[i + 1][0]) ||
+        (i > 0 && el[0] != arr[i - 1][0])
+          ? uniqueElArr.push(el)
+          : null
+      );
 
-    return uniqueElArr;
+      return uniqueElArr;
+    } else {
+      return sort;
+    }
   };
 
   let marketChartCopy = JSON.parse(JSON.stringify(marketChart));
@@ -84,8 +94,8 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   cumulativeValueInvestment();
 
   // console.log(marketChartCopy);
-  // console.log(valueArr);
-  // console.log(timeStampArr);
+  console.log(valueArr);
+  console.log(timeStampArr);
 
   // const getDates = () => {
   //   let timeArr = [];
@@ -105,8 +115,21 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
             },
           ],
         }}
-        height={400}
-        width={600}
+        // width={500}
+        height={500}
+        options={{
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                scaleLabel: {
+                  display: true,
+                  labelString: `Price in ${positions[0].fiat_currency}`,
+                },
+              },
+            ],
+          },
+        }}
       />
     </div>
   );

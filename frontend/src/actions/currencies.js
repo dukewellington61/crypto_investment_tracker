@@ -1,5 +1,4 @@
 import axios from "axios";
-import { getUser } from "./user";
 
 export const getCryptoCurriencies = async (currencyNamesArr) => {
   const currencyNamesString = await getNameString(currencyNamesArr);
@@ -43,17 +42,20 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
 export const getMarketChartsCrypto = async (user, currency) => {
   // CoinGecko API V3 has granularity of Hourly data for duration between 1 day and 90 days - that's too much data
   // in order to get  Daily data the follwing three const from... make sure the duration is always at least 91 days
+  // ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled **
 
   const fromDatePositions =
     new Date(await getFromDate(user, currency)).getTime() / 1000;
 
-  const fromDate91DaysBeforeToday =
-    new Date().getTime() / 1000 - 91 * 24 * 60 * 60;
+  // const fromDate91DaysBeforeToday =
+  //   new Date().getTime() / 1000 - 91 * 24 * 60 * 60;
 
-  const from =
-    fromDate91DaysBeforeToday < fromDatePositions
-      ? fromDate91DaysBeforeToday
-      : fromDatePositions;
+  // const from =
+  //   fromDate91DaysBeforeToday < fromDatePositions
+  //     ? fromDate91DaysBeforeToday
+  //     : fromDatePositions;
+
+  const from = fromDatePositions;
 
   const to = new Date().getTime() / 1000;
 
@@ -63,10 +65,6 @@ export const getMarketChartsCrypto = async (user, currency) => {
     const res = await axios.get(urlString);
 
     const resTransformed = await addDateToArr(res.data.prices);
-
-    // console.log(resTransformed.length);
-
-    // return resTransformed;
 
     return resTransformed;
   } catch (err) {
@@ -94,4 +92,12 @@ const getFromDate = (user, currency) => {
 };
 
 const addDateToArr = (arr) =>
-  arr.map((el, index) => [...arr[index], (arr[index][0] = new Date(el[0]))]);
+  arr.map((el, index) => {
+    const date = new Date(el[0]);
+    const day =
+      date.getDate() < 10 ? "0" + date.getDate() : "" + date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+    const dateString = `${day}. ${month} ${year}`;
+    return [...arr[index], dateString];
+  });

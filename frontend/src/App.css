@@ -185,3 +185,10 @@
 #position > div {
   margin: 1rem;
 }
+
+/* components/portfolio/PositionRoiChartDiagram.js */
+canvas {
+  width: 80% !important;
+
+  margin: 0 auto;
+}

@@ -40,6 +40,14 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
     return sum;
   };
 
+  const setCurrency = (currency) => {
+    if (sessionStorage.getItem("crypto_currency")) {
+      sessionStorage.removeItem("crypto_currency");
+      sessionStorage.setItem("crypto_currency", currency);
+    } else {
+      sessionStorage.setItem("crypto_currency", currency);
+    }
+  };
   return (
     <div>
       <table className="table table-striped">
@@ -78,11 +86,8 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                   <Link
                     to={{
                       pathname: "/position_roi_chart",
-                      state: {
-                        currency: currency,
-                        user: user,
-                      },
                     }}
+                    onClick={() => setCurrency(currency)}
                   >
                     {(
                       (getCurrentValue(currency) * 100) / getTotal(currency) -

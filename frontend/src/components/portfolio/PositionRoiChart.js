@@ -1,28 +1,22 @@
 import React, { Fragment, useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { getMarketChartsCrypto } from "../../actions/currencies";
-import { getAmount } from "../../actions/aux";
 import PositionRoiChartDiagram from "./PositionRoiChartDiagram";
 
 const PositionRoiChart = ({ user, logedin }) => {
-  let data = useLocation();
+  const currency = sessionStorage.getItem("crypto_currency");
 
   const [marketChart, setMarketChart] = useState([]);
 
   useEffect(() => {
     const updateState = async () => {
       if (logedin) {
-        const chartData = await getMarketChartsCrypto(
-          user,
-          data.state.currency
-        );
+        const chartData = await getMarketChartsCrypto(user, currency);
         setMarketChart(chartData);
-        // console.log(marketChart);
       }
     };
 
     updateState();
-  }, []);
+  }, [user, logedin]);
 
   return marketChart.length === 0 ? (
     <div>Loading ...</div>
@@ -32,7 +26,7 @@ const PositionRoiChart = ({ user, logedin }) => {
         <PositionRoiChartDiagram
           positions={user.positions}
           marketChart={marketChart}
-          currency={data.state.currency}
+          currency={currency}
         />
       </Fragment>
     </div>
