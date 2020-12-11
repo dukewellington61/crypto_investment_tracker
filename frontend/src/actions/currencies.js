@@ -39,13 +39,14 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
   }
 };
 
-export const getMarketChartsCrypto = async (user, currency) => {
+export const getMarketChartsCrypto = async (user, currency, earliestDate) => {
   // CoinGecko API V3 has granularity of Hourly data for duration between 1 day and 90 days - that's too much data
   // in order to get  Daily data the follwing three const from... make sure the duration is always at least 91 days
   // ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled **
 
-  const fromDatePositions =
-    new Date(await getFromDate(user, currency)).getTime() / 1000;
+  const fromDatePositions = earliestDate
+    ? new Date(earliestDate).getTime() / 1000
+    : new Date(await getFromDate(user, currency)).getTime() / 1000;
 
   // const fromDate91DaysBeforeToday =
   //   new Date().getTime() / 1000 - 91 * 24 * 60 * 60;

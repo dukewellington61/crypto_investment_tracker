@@ -1,7 +1,7 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
 
-const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
+const CurrencyTotalChartDiagram = ({ positions, marketChart, currency }) => {
   // console.log(marketChart);
 
   // const getData = () => {
@@ -40,21 +40,23 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
     }
 
     // removes elements from array which's purchase date is the same like the purchase date of the following element
-    if (sort.length > 1) {
-      let uniqueElArr = [];
-      sort.forEach((el, i, arr) =>
-        (uniqueElArr.length > 1 &&
-          i < arr.length - 1 &&
-          el[0] != arr[i + 1][0]) ||
-        (i > 0 && el[0] != arr[i - 1][0])
-          ? uniqueElArr.push(el)
-          : null
-      );
+    // if (sort.length > 1) {
+    //   let uniqueElArr = [];
+    //   sort.forEach((el, i, arr) =>
+    //     (uniqueElArr.length > 1 &&
+    //       i < arr.length - 1 &&
+    //       el[0] != arr[i + 1][0]) ||
+    //     (i > 0 && el[0] != arr[i - 1][0])
+    //       ? uniqueElArr.push(el)
+    //       : null
+    //   );
 
-      return uniqueElArr;
-    } else {
-      return sort;
-    }
+    //   // return uniqueElArr;
+    //   return sort;
+    // } else {
+    //   return sort;
+    // }
+    return sort;
   };
 
   let marketChartCopy = JSON.parse(JSON.stringify(marketChart));
@@ -62,31 +64,45 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   let valueArr = [];
   let timeStampArr = [];
 
+  // console.log(marketChartCopy.length);
+
   const cumulativeValueInvestment = () => {
+    const duration =
+      (marketChartCopy[marketChartCopy.length - 1][0] - marketChartCopy[0][0]) /
+      1000 /
+      (24 * 60 * 60);
+
     getAmountAndDate().forEach((array1) => {
       marketChartCopy.forEach((array2, index) => {
-        if (array1[0] < array2[0]) {
+        if (array1[0] <= array2[0]) {
           valueArr[index] = array2[1] * array1[1];
-          if (index % 3 === 0) {
+          if (
+            index === 0 || duration < 90 ? index % 10 === 0 : index % 5 === 0
+          ) {
             timeStampArr[index] = array2[2];
           } else {
             timeStampArr[index] = " ";
           }
-          // counter++;
+
+          // timeStampArr[index] = array2[2];
+
           // console.log(
-          //   // counter +
+          //   // array2[2] +
           //   //   "**" +
-          //   array2[2] +
-          //     "**" +
-          //     array2[1] * array1[1] +
-          //     "**" +
-          //     array2[1] +
-          //     "**" +
-          //     array1[1]
+          //   //   array2[1] * array1[1] +
+          //   //   "**" +
+          //   //   array2[1] +
+          //   //   "**" +
+          //   //   array1[1]
+
           // );
+
+          // console.log(timeStampArr);
         }
       });
     });
+
+    // console.log(marketChart);
 
     return marketChartCopy;
   };
@@ -94,8 +110,8 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   cumulativeValueInvestment();
 
   // console.log(marketChartCopy);
-  console.log(valueArr);
-  console.log(timeStampArr);
+  // console.log(valueArr);
+  // console.log(timeStampArr);
 
   // const getDates = () => {
   //   let timeArr = [];
@@ -135,4 +151,4 @@ const PositionRoiChartDiagram = ({ positions, marketChart, currency }) => {
   );
 };
 
-export default PositionRoiChartDiagram;
+export default CurrencyTotalChartDiagram;

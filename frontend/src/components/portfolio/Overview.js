@@ -85,7 +85,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                 <td>
                   <Link
                     to={{
-                      pathname: "/position_roi_chart",
+                      pathname: "/currency_total_chart",
                     }}
                     onClick={() => setCurrency(currency)}
                   >
@@ -108,11 +108,18 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
             {(currentValueTotal / 3 - getTotalPurchase()).toFixed(2)}&euro;
           </td>
           <td>
-            {(
-              ((currentValueTotal / 3) * 100) / getTotalPurchase() -
-              100
-            ).toFixed(0)}
-            %
+            <Link
+              to={{
+                pathname: "/total_chart",
+              }}
+            >
+              {" "}
+              {(
+                ((currentValueTotal / 3) * 100) / getTotalPurchase() -
+                100
+              ).toFixed(0)}
+              %
+            </Link>
           </td>
         </tr>
       </table>

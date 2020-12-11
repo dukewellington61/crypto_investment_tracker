@@ -1,8 +1,8 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
-import PositionRoiChartDiagram from "./PositionRoiChartDiagram";
+import CurrencyTotalChartDiagram from "./CurrencyTotalChartDiagram";
 
-const PositionRoiChart = ({ user, logedin }) => {
+const CurrencyTotalChart = ({ user, logedin }) => {
   const currency = sessionStorage.getItem("crypto_currency");
 
   const [marketChart, setMarketChart] = useState([]);
@@ -23,7 +23,7 @@ const PositionRoiChart = ({ user, logedin }) => {
   ) : (
     <div>
       <Fragment>
-        <PositionRoiChartDiagram
+        <CurrencyTotalChartDiagram
           positions={user.positions}
           marketChart={marketChart}
           currency={currency}
@@ -32,4 +32,4 @@ const PositionRoiChart = ({ user, logedin }) => {
     </div>
   );
 };
-export default PositionRoiChart;
+export default CurrencyTotalChart;

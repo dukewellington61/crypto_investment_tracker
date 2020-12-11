@@ -15,7 +15,8 @@ import PositionInput from "./components/input/PositionInput";
 import Position from "./components/portfolio/Position";
 import PositionChart from "./components/portfolio/PositionChart";
 
-import PositionRoiChart from "./components/portfolio/PositionRoiChart";
+import CurrencyTotalChart from "./components/portfolio/CurrencyTotalChart";
+import TotalChart from "./components/portfolio/TotalChart";
 
 import Alert from "./components/layout/Alert";
 
@@ -121,8 +122,13 @@ const App = () => {
           />
           <Route
             exact
-            path="/position_roi_chart"
-            render={() => <PositionRoiChart user={user} logedin={logedin} />}
+            path="/currency_total_chart"
+            render={() => <CurrencyTotalChart user={user} logedin={logedin} />}
+          />
+          <Route
+            exact
+            path="/total_chart"
+            render={() => <TotalChart user={user} logedin={logedin} />}
           />
 
           <Route
