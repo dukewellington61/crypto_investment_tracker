@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
 import { getCurrenciesNames } from "../../actions/aux";
+import TotalChartDiagramm from "./TotalChartDiagramm";
 
 function TotalChart({ user, logedin }) {
-  const [marketCharts, setMarketCharts] = useState([]);
+  const [marketCharts, setMarketCharts] = useState({});
 
   useEffect(() => {
     const updateState = async () => {
       if (logedin) {
-        let resArr = [];
+        const currenciesObject = {};
+
         const earliestDate = getEarliestPurchaseDate();
         const currencyNamesArr = getCurrenciesNames(user);
         currencyNamesArr.forEach(async (currencyName) => {
@@ -17,17 +19,13 @@ function TotalChart({ user, logedin }) {
             currencyName,
             earliestDate
           );
-
-          const obj = {};
-
-          obj[currencyName] = res;
-
-          resArr.push(obj);
-
-          setMarketCharts(resArr);
-          return res;
+          return {
+            ...currenciesObject,
+            ...(currenciesObject[currencyName] = res),
+          };
         });
-        marketCharts.forEach((obj) => (obj.bitcoin ? console.log(obj) : null));
+        setMarketCharts(currenciesObject);
+        // console.log(marketCharts);
       }
     };
 
@@ -42,7 +40,25 @@ function TotalChart({ user, logedin }) {
 
     updateState();
   }, [user, logedin]);
-  return <div></div>;
+
+  console.log("test");
+
+  function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
+  return isEmpty(marketCharts) ? (
+    <div>Loading ...</div>
+  ) : (
+    <div>
+      {
+        <TotalChartDiagramm
+          marketCharts={marketCharts}
+          positions={user.positions}
+        />
+      }
+    </div>
+  );
 }
 
 export default TotalChart;

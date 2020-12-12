@@ -28,7 +28,7 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
 
   const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
 
-  console.log(urlString);
+  // console.log(urlString);
 
   try {
     const res = await axios.get(urlString);
