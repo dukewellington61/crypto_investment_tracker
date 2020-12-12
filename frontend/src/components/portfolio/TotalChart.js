@@ -41,7 +41,7 @@ function TotalChart({ user, logedin }) {
     updateState();
   }, [user, logedin]);
 
-  // console.log("test");
+  console.log("test");
 
   function isEmpty(obj) {
     return Object.keys(obj).length === 0;
