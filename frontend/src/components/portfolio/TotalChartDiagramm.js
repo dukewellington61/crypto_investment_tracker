@@ -1,44 +1,55 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { cumulativeValueInvestment } from "../../actions/aux";
 
 function TotalChartDiagramm({ positions, marketCharts }) {
-  const currenciesTotalObjectsArray = [];
+  // console.log(marketCharts);
 
-  const resArray = new Array(93).fill(0);
+  const [resultArray, setResultArray] = useState([]);
 
-  const timeStamps = [];
+  const [timeStampArray, setTimeStampArray] = useState([]);
 
-  const totalValueInvestment = (arr) => {
-    currenciesTotalObjectsArray.push(arr);
-  };
+  useEffect(() => {
+    const currenciesTotalObjectsArray = [];
 
-  const currencyArr = Object.keys(marketCharts);
+    const timeStamps = [];
 
-  currencyArr.forEach((currency) =>
-    totalValueInvestment(
-      cumulativeValueInvestment(positions, marketCharts[currency], currency)
-    )
-  );
+    const totalValueInvestment = (arr) => {
+      currenciesTotalObjectsArray.push(arr);
+    };
 
-  // console.log(currenciesTotalObjectsArray);
+    const currencyArr = Object.keys(marketCharts);
 
-  currenciesTotalObjectsArray.forEach((obj) => {
-    obj.valueArray.forEach((el, index) => (resArray[index] += el));
-    obj.timeStampArray.forEach((el, index) => (timeStamps[index] = el));
-  });
+    currencyArr.forEach((currency) =>
+      totalValueInvestment(
+        cumulativeValueInvestment(positions, marketCharts[currency], currency)
+      )
+    );
 
-  console.log(resArray);
+    currenciesTotalObjectsArray.forEach((obj) => {
+      obj.timeStampArray.forEach((el, index) => (timeStamps[index] = el));
+    });
+
+    const resArray = new Array(timeStamps.length).fill(0);
+
+    currenciesTotalObjectsArray.forEach((obj) => {
+      obj.valueArray.forEach((el, index) => (resArray[index] += el));
+    });
+
+    setResultArray(resArray);
+    console.log(resArray);
+    setTimeStampArray(timeStamps);
+  }, []);
 
   return (
     <div>
       <Line
         data={{
-          labels: timeStamps,
+          labels: timeStampArray,
           datasets: [
             {
               label: "EUR",
-              data: resArray,
+              data: resultArray,
             },
           ],
         }}

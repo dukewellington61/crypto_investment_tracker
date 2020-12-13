@@ -5,11 +5,12 @@ import TotalChartDiagramm from "./TotalChartDiagramm";
 
 function TotalChart({ user, logedin }) {
   const [marketCharts, setMarketCharts] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const updateState = async () => {
       if (logedin) {
-        const currenciesObject = {};
+        let currenciesObject = {};
 
         const earliestDate = getEarliestPurchaseDate();
         const currencyNamesArr = getCurrenciesNames(user);
@@ -19,13 +20,15 @@ function TotalChart({ user, logedin }) {
             currencyName,
             earliestDate
           );
-          return {
-            ...currenciesObject,
-            ...(currenciesObject[currencyName] = res),
-          };
+          currenciesObject[currencyName] = res;
+
+          if (
+            Object.keys(currenciesObject).length === currencyNamesArr.length
+          ) {
+            setMarketCharts(currenciesObject);
+            setLoaded(true);
+          }
         });
-        setMarketCharts(currenciesObject);
-        // console.log(marketCharts);
       }
     };
 
@@ -41,13 +44,9 @@ function TotalChart({ user, logedin }) {
     updateState();
   }, [user, logedin]);
 
-  // console.log("test");
+  console.log("test");
 
-  function isEmpty(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  return isEmpty(marketCharts) ? (
+  return !loaded ? (
     <div>Loading ...</div>
   ) : (
     <div>

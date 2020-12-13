@@ -84,9 +84,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                 <td>{getBalance(currency).toFixed(2)}&euro;</td>
                 <td>
                   <Link
-                    to={{
-                      pathname: "/currency_total_chart",
-                    }}
+                    to="/currency_total_chart"
                     onClick={() => setCurrency(currency)}
                   >
                     {(
@@ -108,12 +106,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
             {(currentValueTotal / 3 - getTotalPurchase()).toFixed(2)}&euro;
           </td>
           <td>
-            <Link
-              to={{
-                pathname: "/total_chart",
-              }}
-            >
-              {" "}
+            <Link to="/total_chart">
               {(
                 ((currentValueTotal / 3) * 100) / getTotalPurchase() -
                 100

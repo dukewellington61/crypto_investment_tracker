@@ -61,8 +61,6 @@ const getAmountAndDate = (positions, currency) => {
 };
 
 export const cumulativeValueInvestment = (positions, marketChart, currency) => {
-  // console.log("HERE:");
-  // console.log(marketChart);
   let resultObject = {};
   let valueArr = [];
   let timeStampArr = [];
@@ -72,10 +70,21 @@ export const cumulativeValueInvestment = (positions, marketChart, currency) => {
       (24 * 60 * 60)
     : null;
 
+  // let counter = 0;
+
   getAmountAndDate(positions, currency).forEach((array1) => {
     marketChart.forEach((array2, index) => {
       if (array1[0] <= array2[0]) {
         valueArr[index] = array2[1] * array1[1];
+        // console.log(
+        //   counter++ +
+        //     "***" +
+        //     array2[1] +
+        //     " * " +
+        //     array1[1] +
+        //     " = " +
+        //     valueArr[index]
+        // );
         if (index === 0 || duration < 90 ? index % 10 === 0 : index % 5 === 0) {
           timeStampArr[index] = array2[2];
         } else {

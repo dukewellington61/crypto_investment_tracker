@@ -3,6 +3,7 @@ import { Line } from "react-chartjs-2";
 import { cumulativeValueInvestment } from "../../actions/aux";
 
 const CurrencyTotalChartDiagram = ({ positions, marketChart, currency }) => {
+  // console.log(marketChart);
   return (
     <div>
       <Line

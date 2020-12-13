@@ -12,6 +12,16 @@ function Position() {
     }
   }, []);
 
+  const transformDate = (val) => {
+    const date = new Date(val);
+    const day =
+      date.getDate() < 10 ? "0" + date.getDate() : "" + date.getDate();
+    const month = date.toLocaleString("default", { month: "long" });
+    const year = date.getFullYear();
+    const dateString = `${day}. ${month} ${year}`;
+    return dateString;
+  };
+
   return (
     <Fragment>
       <div>
@@ -42,7 +52,8 @@ function Position() {
                 </div>
                 <div className="col">
                   purchase date:
-                  {position.date_of_purchase.split("T").slice(0, 1).join("")}
+                  {/* {position.date_of_purchase.split("T").slice(0, 1).join("")} */}
+                  {transformDate(position.date_of_purchase)}
                 </div>
                 <div className="col">
                   initial value:

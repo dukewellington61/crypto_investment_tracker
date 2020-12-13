@@ -130,7 +130,6 @@ const App = () => {
             path="/total_chart"
             render={() => <TotalChart user={user} logedin={logedin} />}
           />
-
           <Route
             exact
             path="/login"
