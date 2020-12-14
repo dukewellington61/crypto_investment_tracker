@@ -1,9 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getCurrenciesNames } from "../../actions/aux";
+import { getNamesAndValues } from "../../actions/aux";
 import { getAmount } from "../../actions/aux";
+import { getCurrentValue } from "../../actions/aux";
+import { getCurrentPrice } from "../../actions/aux";
 
 const Overview = ({ user, cryptoCurrencies, logedin }) => {
+  const [currencyNamesAndValues, setCurrencyNamesAndValues] = useState([]);
+
+  const [currentValueTotal, setCurrentValueTotal] = useState(0);
+
+  const [totalPurchase, setTotalPurchase] = useState(0);
+
+  useEffect(() => {
+    // console.log("USE_EFFECT");
+    const res = getNamesAndValues(user, cryptoCurrencies);
+
+    // console.log(res);
+
+    setCurrencyNamesAndValues(res);
+
+    // console.log(currencyNamesAndValues);
+
+    let totalsArray = [];
+
+    if (currencyNamesAndValues) {
+      totalsArray = currencyNamesAndValues.map((el) =>
+        getCurrentValue(user, cryptoCurrencies, el[1])
+      );
+    }
+
+    setCurrentValueTotal(totalsArray.reduce((a, b) => a + b, 0));
+
+    setTotalPurchase(getTotalPurchase());
+  }, []);
+
   const getTotal = (currency) => {
     let sum = 0;
     user.positions.map((position) => {
@@ -14,31 +45,14 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
     return sum;
   };
 
-  const getCurrentPrice = (currency) => {
-    if (cryptoCurrencies.data) {
-      return cryptoCurrencies.data.find((el) => el.id === currency)
-        .current_price;
-    }
-  };
-
-  let currentValueTotal = 0;
-
-  const getCurrentValue = (currency) => {
-    const res = getCurrentPrice(currency) * getAmount(user, currency);
-    currentValueTotal += res;
-    return res;
+  const getTotalPurchase = () => {
+    let sum = 0;
+    if (logedin) user.positions.forEach((position) => (sum += position.price));
+    return sum;
   };
 
   const getBalance = (currency) =>
-    getCurrentValue(currency) - getTotal(currency);
-
-  const getTotalPurchase = () => {
-    let sum = 0;
-
-    if (logedin) user.positions.forEach((position) => (sum += position.price));
-
-    return sum;
-  };
+    getCurrentValue(user, cryptoCurrencies, currency) - getTotal(currency);
 
   const setCurrency = (currency) => {
     if (sessionStorage.getItem("crypto_currency")) {
@@ -48,6 +62,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
       sessionStorage.setItem("crypto_currency", currency);
     }
   };
+
   return (
     <div>
       <table className="table table-striped">
@@ -63,32 +78,36 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
         </thead>
         <tbody>
           {logedin &&
-            getCurrenciesNames(user).map((currency) => (
+            currencyNamesAndValues.map((el) => (
               <tr>
                 <Link
                   to={{
                     pathname: "/position",
-                    current_price: getCurrentPrice(currency),
+                    current_price: getCurrentPrice(cryptoCurrencies, el[1]),
                     state: {
-                      currency: currency,
+                      currency: el[1],
                       user: user,
                     },
                   }}
                 >
-                  <th scope="row">{currency}</th>
+                  <th scope="row">{el[1]}</th>
                 </Link>
 
-                <td>{getAmount(user, currency).toFixed(3)}</td>
-                <td>{getTotal(currency).toFixed(2)}&euro;</td>
-                <td>{getCurrentValue(currency).toFixed(2)}&euro;</td>
-                <td>{getBalance(currency).toFixed(2)}&euro;</td>
+                <td>{getAmount(user, el[1]).toFixed(3)}</td>
+                <td>{getTotal(el[1]).toFixed(2)}&euro;</td>
+                <td>
+                  {getCurrentValue(user, cryptoCurrencies, el[1]).toFixed(2)}
+                  &euro;
+                </td>
+                <td>{getBalance(el[1]).toFixed(2)}&euro;</td>
                 <td>
                   <Link
                     to="/currency_total_chart"
-                    onClick={() => setCurrency(currency)}
+                    onClick={() => setCurrency(el[1])}
                   >
                     {(
-                      (getCurrentValue(currency) * 100) / getTotal(currency) -
+                      (getCurrentValue(user, cryptoCurrencies, el[1]) * 100) /
+                        getTotal(el[1]) -
                       100
                     ).toFixed(0)}
                     %
@@ -100,18 +119,12 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
         <tr>
           <th scope="row"></th>
           <td></td>
-          <td>{getTotalPurchase().toFixed(2)}&euro;</td>
-          <td>{(currentValueTotal / 3).toFixed(2)}&euro;</td>
-          <td>
-            {(currentValueTotal / 3 - getTotalPurchase()).toFixed(2)}&euro;
-          </td>
+          <td>{totalPurchase.toFixed(2)}&euro;</td>
+          <td>{currentValueTotal.toFixed(2)}&euro;</td>
+          <td>{(currentValueTotal - totalPurchase).toFixed(2)}&euro;</td>
           <td>
             <Link to="/total_chart">
-              {(
-                ((currentValueTotal / 3) * 100) / getTotalPurchase() -
-                100
-              ).toFixed(0)}
-              %
+              {((currentValueTotal * 100) / totalPurchase - 100).toFixed(0)}%
             </Link>
           </td>
         </tr>

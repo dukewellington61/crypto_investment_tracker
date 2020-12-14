@@ -85,11 +85,12 @@ const getFromDate = (user, currency) => {
         dates.push(position.date_of_purchase)
       );
 
-  let oldestDate = dates.sort(function (a, b) {
+  let sort = dates.sort(function (a, b) {
     return Date.parse(a) > Date.parse(b);
   });
 
-  return oldestDate[oldestDate.length - 1];
+  // conditionally return because sequence in sort array is beeing turned around on reload (for some reason) sometimes returning the latest, rather than the earliest date
+  return sort[0] > sort[sort.length - 1] ? sort[sort.length - 1] : sort[0];
 };
 
 const addDateToArr = (arr) =>

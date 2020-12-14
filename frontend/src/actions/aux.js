@@ -11,6 +11,42 @@ export const getCurrenciesNames = (user) => {
   return [...new Set(currencyArr)];
 };
 
+export const getNamesAndValues = (user, cryptoCurrencies) => {
+  console.log("test");
+  // console.log(cryptoCurrencies);
+  let namesAndValuesObj = {};
+  getCurrenciesNames(user).forEach((currencyName) => {
+    namesAndValuesObj[currencyName] = getCurrentValue(
+      user,
+      cryptoCurrencies,
+      currencyName
+    );
+  });
+
+  let res = Object.entries(namesAndValuesObj).sort(function (a, b) {
+    return a[1] > b[1];
+  });
+
+  // console.log(res);
+
+  return res;
+};
+
+export const getCurrentValue = (user, cryptoCurrencies, currency) => {
+  // console.log(currency);
+
+  const res =
+    getCurrentPrice(cryptoCurrencies, currency) * getAmount(user, currency);
+  return res;
+};
+
+export const getCurrentPrice = (cryptoCurrencies, currency) => {
+  console.log(currency);
+  if (cryptoCurrencies.data) {
+    return cryptoCurrencies.data.find((el) => el.id === currency).current_price;
+  }
+};
+
 export const getCurrencyPositions = (user, currency) => {
   if (user.positions) {
     return user.positions.filter(
