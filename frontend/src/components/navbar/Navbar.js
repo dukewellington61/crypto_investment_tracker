@@ -12,7 +12,7 @@ const Navbar = ({ signout, logedin }) => {
           to="/"
           style={{ fontWeight: "bold" }}
         >
-          Crypto Investment Tracker
+          Crypto Portfolio Viewer
         </Link>
       </div>
 

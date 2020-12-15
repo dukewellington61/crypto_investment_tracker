@@ -12,7 +12,6 @@ const CurrencyTotalChart = ({ user, logedin }) => {
       if (logedin) {
         const chartData = await getMarketChartsCrypto(user, currency);
         setMarketChart(chartData);
-        console.log(marketChart);
       }
     };
 

@@ -44,8 +44,6 @@ function TotalChart({ user, logedin }) {
     updateState();
   }, [user, logedin]);
 
-  console.log("test");
-
   return !loaded ? (
     <div>Loading ...</div>
   ) : (
