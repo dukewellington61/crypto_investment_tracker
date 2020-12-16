@@ -95,11 +95,12 @@ export const cumulativeValueInvestment = (positions, marketChart, currency) => {
   let resultObject = {};
   let valueArr = [];
   let timeStampArr = [];
-  const duration = marketChart
-    ? (marketChart[marketChart.length - 1][0] - marketChart[0][0]) /
-      1000 /
-      (24 * 60 * 60)
-    : null;
+  let duration = 0;
+
+  duration =
+    (marketChart[marketChart.length - 1][0] - marketChart[0][0]) /
+    1000 /
+    (24 * 60 * 60);
 
   getAmountAndDate(positions, currency).forEach((array1) => {
     marketChart.forEach((array2, index) => {

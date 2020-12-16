@@ -1,5 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
+import { cumulativeValueInvestment } from "../../actions/aux";
 import CurrencyTotalChartDiagram from "./CurrencyTotalChartDiagram";
 
 const CurrencyTotalChart = ({ user, logedin }) => {
@@ -7,16 +8,24 @@ const CurrencyTotalChart = ({ user, logedin }) => {
 
   const [marketChart, setMarketChart] = useState([]);
 
+  const [currencyTotal, setCurrencyTotal] = useState({});
+
   useEffect(() => {
     const updateState = async () => {
       if (logedin) {
         const chartData = await getMarketChartsCrypto(user, currency);
         setMarketChart(chartData);
+
+        setCurrencyTotal(
+          cumulativeValueInvestment(user.positions, chartData, currency)
+        );
       }
     };
 
     updateState();
   }, [user, logedin]);
+
+  useEffect(() => {}, [marketChart]);
 
   return marketChart.length === 0 ? (
     <div>Loading ...</div>
@@ -24,9 +33,9 @@ const CurrencyTotalChart = ({ user, logedin }) => {
     <div>
       <Fragment>
         <CurrencyTotalChartDiagram
-          positions={user.positions}
-          marketChart={marketChart}
+          currencyTotal={currencyTotal}
           currency={currency}
+          fiat={user.positions[0].fiat_currency}
         />
       </Fragment>
     </div>

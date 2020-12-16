@@ -1,19 +1,16 @@
 import React from "react";
 import { Line } from "react-chartjs-2";
-import { cumulativeValueInvestment } from "../../actions/aux";
 
-const CurrencyTotalChartDiagram = ({ positions, marketChart, currency }) => {
+const CurrencyTotalChartDiagram = ({ currencyTotal, currency, fiat }) => {
   return (
     <div>
       <Line
         data={{
-          labels: cumulativeValueInvestment(positions, marketChart, currency)
-            .timeStampArray,
+          labels: currencyTotal.timeStampArray,
           datasets: [
             {
               label: currency,
-              data: cumulativeValueInvestment(positions, marketChart, currency)
-                .valueArray,
+              data: currencyTotal.valueArray,
             },
           ],
         }}
@@ -26,7 +23,7 @@ const CurrencyTotalChartDiagram = ({ positions, marketChart, currency }) => {
               {
                 scaleLabel: {
                   display: true,
-                  labelString: `Price in ${positions[0].fiat_currency}`,
+                  labelString: `Price in ${fiat}`,
                 },
               },
             ],

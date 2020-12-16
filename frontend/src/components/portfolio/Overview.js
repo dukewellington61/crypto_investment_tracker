@@ -89,7 +89,10 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                 <td>{getAmount(user, el[0]).toFixed(3)}</td>
                 <td>{getTotal(el[0]).toFixed(2)}&euro;</td>
                 <td>
-                  <Link to="/currency_total_chart">
+                  <Link
+                    to="/currency_total_chart"
+                    onClick={() => setCurrency(el[0])}
+                  >
                     {getCurrentValue(user, cryptoCurrencies, el[0]).toFixed(2)}
                     &euro;
                   </Link>

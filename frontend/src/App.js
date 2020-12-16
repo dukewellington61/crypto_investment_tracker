@@ -30,6 +30,8 @@ const App = () => {
 
   const [alert, setAlert] = useState({});
 
+  console.log("App.js");
+
   useEffect(() => {
     loadUser();
   }, []);
