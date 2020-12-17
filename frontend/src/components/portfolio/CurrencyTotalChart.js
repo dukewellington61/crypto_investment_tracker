@@ -2,9 +2,12 @@ import React, { Fragment, useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
 import { cumulativeValueInvestment } from "../../actions/aux";
 import CurrencyTotalChartDiagram from "./CurrencyTotalChartDiagram";
+import { useLocation } from "react-router-dom";
 
 const CurrencyTotalChart = ({ user, logedin }) => {
   const currency = sessionStorage.getItem("crypto_currency");
+
+  const data = useLocation();
 
   const [marketChart, setMarketChart] = useState([]);
 
@@ -36,6 +39,7 @@ const CurrencyTotalChart = ({ user, logedin }) => {
           currencyTotal={currencyTotal}
           currency={currency}
           fiat={user.positions[0].fiat_currency}
+          origin={data.state.origin}
         />
       </Fragment>
     </div>

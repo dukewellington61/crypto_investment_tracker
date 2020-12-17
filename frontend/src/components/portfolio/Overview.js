@@ -87,19 +87,57 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
                 </Link>
 
                 <td>{getAmount(user, el[0]).toFixed(3)}</td>
-                <td>{getTotal(el[0]).toFixed(2)}&euro;</td>
                 <td>
                   <Link
-                    to="/currency_total_chart"
+                    to={{
+                      pathname: "/currency_total_chart",
+                      state: {
+                        origin: "initialInvestment",
+                      },
+                    }}
+                    onClick={() => setCurrency(el[0])}
+                  >
+                    {getTotal(el[0]).toFixed(2)}&euro;
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={{
+                      pathname: "/currency_total_chart",
+                      state: {
+                        origin: "currentValue",
+                      },
+                    }}
                     onClick={() => setCurrency(el[0])}
                   >
                     {getCurrentValue(user, cryptoCurrencies, el[0]).toFixed(2)}
                     &euro;
                   </Link>
                 </td>
-                <td>{getBalance(el[0]).toFixed(2)}&euro;</td>
                 <td>
-                  <Link to="/roi_cart" onClick={() => setCurrency(el[0])}>
+                  {" "}
+                  <Link
+                    to={{
+                      pathname: "/currency_total_chart",
+                      state: {
+                        origin: "balance",
+                      },
+                    }}
+                    onClick={() => setCurrency(el[0])}
+                  >
+                    {getBalance(el[0]).toFixed(2)}&euro;
+                  </Link>
+                </td>
+                <td>
+                  <Link
+                    to={{
+                      pathname: "/currency_total_chart",
+                      state: {
+                        origin: "roi",
+                      },
+                    }}
+                    onClick={() => setCurrency(el[0])}
+                  >
                     {(
                       (getCurrentValue(user, cryptoCurrencies, el[0]) * 100) /
                         getTotal(el[0]) -
@@ -114,13 +152,53 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
         <tr>
           <th scope="row"></th>
           <td></td>
-          <td>{totalPurchase.toFixed(2)}&euro;</td>
           <td>
-            <Link to="/total_chart">{currentValueTotal.toFixed(2)}&euro;</Link>
+            {" "}
+            <Link
+              to={{
+                pathname: "/total_chart",
+                state: {
+                  origin: "total_initial_value",
+                },
+              }}
+            >
+              {totalPurchase.toFixed(2)}&euro;
+            </Link>
           </td>
-          <td>{(currentValueTotal - totalPurchase).toFixed(2)}&euro;</td>
           <td>
-            <Link to="/total_roi_chart">
+            <Link
+              to={{
+                pathname: "/total_chart",
+                state: {
+                  origin: "total_current_value",
+                },
+              }}
+            >
+              {currentValueTotal.toFixed(2)}&euro;
+            </Link>
+          </td>
+          <td>
+            {" "}
+            <Link
+              to={{
+                pathname: "/total_chart",
+                state: {
+                  origin: "total_balance",
+                },
+              }}
+            >
+              {(currentValueTotal - totalPurchase).toFixed(2)}&euro;
+            </Link>
+          </td>
+          <td>
+            <Link
+              to={{
+                pathname: "/total_chart",
+                state: {
+                  origin: "total_roi",
+                },
+              }}
+            >
               {((currentValueTotal * 100) / totalPurchase - 100).toFixed(0)}%
             </Link>
           </td>

@@ -64,7 +64,7 @@ export const getAmount = (user, currencyName) => {
 };
 
 const getAmountAndDate = (positions, currencyName) => {
-  // extracts amount of coins and date of purchase
+  // extracts amount of coins, date of purchase and price
   let AmountAndDateArr = [];
 
   positions.forEach((el) => {
@@ -73,6 +73,7 @@ const getAmountAndDate = (positions, currencyName) => {
     if (el.crypto_currency === currencyName) {
       arrEl[0] = Date.parse(el.date_of_purchase);
       arrEl[1] = parseFloat(el.amount);
+      arrEl[2] = el.price;
       AmountAndDateArr.push(arrEl);
     }
   });
@@ -88,36 +89,64 @@ const getAmountAndDate = (positions, currencyName) => {
       ? (sort[element][1] = sort[element][1] + sort[element - 1][1])
       : (sort[element][1] = sort[element][1]);
   }
+
+  // adds price of individual purchases so that each price in array is the sum of itself + the previous amount
+  for (const element in sort) {
+    element > 0
+      ? (sort[element][2] = sort[element][2] + sort[element - 1][2])
+      : (sort[element][2] = sort[element][2]);
+  }
   return sort;
 };
 
+// returns object which has various arrays (initialValueArray, currentValueArray etc..)
+// is beeing called from @components/portfolio/TotalChartDiagramm.js for individual currency charts and CurrencyTotalChart.js
+// for charts which have combined values of all the currencies a user has
 export const cumulativeValueInvestment = (positions, marketChart, currency) => {
   let resultObject = {};
-  let valueArr = [];
+  let initialValueArr = [];
+  let currentValueArr = [];
+  let balanceArr = [];
+  let roiArr = [];
   let timeStampArr = [];
-  let duration = 0;
-
-  duration =
-    (marketChart[marketChart.length - 1][0] - marketChart[0][0]) /
-    1000 /
-    (24 * 60 * 60);
 
   getAmountAndDate(positions, currency).forEach((array1) => {
     marketChart.forEach((array2, index) => {
       if (array1[0] <= array2[0]) {
-        valueArr[index] = array2[1] * array1[1];
-
-        if (index === 0 || duration < 90 ? index % 10 === 0 : index % 5 === 0) {
-          timeStampArr[index] = array2[2];
-        } else {
-          timeStampArr[index] = " ";
-        }
+        currentValueArr[index] = array2[1] * array1[1];
+        timeStampArr[index] = getTimeStamps(marketChart, index, array2);
+        initialValueArr[index] = array1[2];
+        balanceArr[index] = currentValueArr[index] - initialValueArr[index];
+        roiArr[index] =
+          100 - (initialValueArr[index] * 100) / currentValueArr[index];
       }
     });
   });
 
-  resultObject.valueArray = valueArr;
+  resultObject.initialValueArray = initialValueArr;
+  resultObject.currentValueArray = currentValueArr;
+  resultObject.balanceArray = balanceArr;
+  resultObject.roiArray = roiArr;
   resultObject.timeStampArray = timeStampArr;
 
   return resultObject;
+};
+
+// returns duration in days -> from date of first purchase currency until now
+// duration is beeing used in conditional to make sure that x-axis doesn't have too many timestamps
+const checkDuration = (marketChart) =>
+  (marketChart[marketChart.length - 1][0] - marketChart[0][0]) /
+  1000 /
+  (24 * 60 * 60);
+
+const getTimeStamps = (marketChart, index, array2) => {
+  if (
+    index === 0 || checkDuration(marketChart) < 90
+      ? index % 10 === 0
+      : index % 5 === 0
+  ) {
+    return array2[2];
+  } else {
+    return " ";
+  }
 };

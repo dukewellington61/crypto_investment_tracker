@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
 import { getCurrenciesNames } from "../../actions/aux";
 import TotalChartDiagramm from "./TotalChartDiagramm";
+import { useLocation } from "react-router-dom";
 
 function TotalChart({ user, logedin }) {
+  const data = useLocation();
+
   const [marketCharts, setMarketCharts] = useState({});
   const [loaded, setLoaded] = useState(false);
 
@@ -52,6 +55,8 @@ function TotalChart({ user, logedin }) {
         <TotalChartDiagramm
           marketCharts={marketCharts}
           positions={user.positions}
+          fiat={user.positions[0].fiat_currency}
+          origin={data.state.origin}
         />
       }
     </div>

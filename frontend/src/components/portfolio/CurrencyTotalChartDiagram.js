@@ -1,7 +1,36 @@
-import React from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
-const CurrencyTotalChartDiagram = ({ currencyTotal, currency, fiat }) => {
+const CurrencyTotalChartDiagram = ({
+  currencyTotal,
+  currency,
+  fiat,
+  origin,
+}) => {
+  const [originateFrom, setOriginateFrom] = useState([]);
+  const [labelStr, setLabelStr] = useState("");
+
+  useEffect(() => {
+    switch (origin) {
+      case "initialInvestment":
+        setOriginateFrom(currencyTotal.initialValueArray);
+        setLabelStr(`Price in ${fiat}`);
+        break;
+      case "currentValue":
+        setOriginateFrom(currencyTotal.currentValueArray);
+        setLabelStr(`Price in ${fiat}`);
+        break;
+      case "balance":
+        setOriginateFrom(currencyTotal.balanceArray);
+        setLabelStr(`Price in ${fiat}`);
+        break;
+      case "roi":
+        setOriginateFrom(currencyTotal.roiArray);
+        setLabelStr(`ROI in %`);
+        break;
+    }
+  }, [currencyTotal, currency, fiat, origin]);
+
   return (
     <div>
       <Line
@@ -10,7 +39,7 @@ const CurrencyTotalChartDiagram = ({ currencyTotal, currency, fiat }) => {
           datasets: [
             {
               label: currency,
-              data: currencyTotal.valueArray,
+              data: originateFrom,
             },
           ],
         }}
@@ -23,7 +52,7 @@ const CurrencyTotalChartDiagram = ({ currencyTotal, currency, fiat }) => {
               {
                 scaleLabel: {
                   display: true,
-                  labelString: `Price in ${fiat}`,
+                  labelString: labelStr,
                 },
               },
             ],
