@@ -5,7 +5,7 @@ import { getAmount } from "../../actions/aux";
 import { getCurrentPrice } from "../../actions/aux";
 import { getCurrentValue } from "../../actions/aux";
 
-const Overview = ({ user, cryptoCurrencies, logedin }) => {
+const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
   const [currencyNamesAndValues, setCurrencyNamesAndValues] = useState([]);
 
   const [currentValueTotal, setCurrentValueTotal] = useState(0);
@@ -26,7 +26,7 @@ const Overview = ({ user, cryptoCurrencies, logedin }) => {
     setCurrentValueTotal(totalsArray.reduce((a, b) => a + b, 0));
 
     setTotalPurchase(getTotalPurchase());
-  }, [user, cryptoCurrencies, logedin]);
+  }, [user, cryptoCurrencies, logedin, re_render]);
 
   const getTotal = (currency) => {
     let sum = 0;

@@ -53,12 +53,31 @@ function TotalChartDiagramm({ positions, marketCharts, fiat, origin }) {
       obj.timeStampArray.forEach((el, index) => (timeStamps[index] = el));
     });
 
+    // the following code sums up initial_value, current_value, balance of every individual currency so that the totals of these attributes can be displayed in a chart
+    // it also calculates the development of roi over time
     const resArray = new Array(timeStamps.length).fill(0);
 
-    if (nameArray)
+    if (nameArray) {
+      const initValResArray = new Array(timeStamps.length).fill(0);
+      const currValResArray = new Array(timeStamps.length).fill(0);
       currenciesTotalObjectsArray.forEach((obj) => {
-        obj[nameArray].forEach((el, index) => (resArray[index] += el));
+        if (nameArray === "roiArray") {
+          obj.initialValueArray.forEach(
+            (el, index) => (initValResArray[index] += el)
+          );
+          obj.currentValueArray.forEach(
+            (el, index) => (currValResArray[index] += el)
+          );
+          obj.roiArray.forEach(
+            (el, index) =>
+              (resArray[index] =
+                (currValResArray[index] * 100) / initValResArray[index] - 100)
+          );
+        } else {
+          obj[nameArray].forEach((el, index) => (resArray[index] += el));
+        }
       });
+    }
 
     setResultArray(resArray);
 
@@ -72,7 +91,7 @@ function TotalChartDiagramm({ positions, marketCharts, fiat, origin }) {
           labels: timeStampArray,
           datasets: [
             {
-              label: "EUR",
+              label: labelStr,
               data: resultArray,
             },
           ],

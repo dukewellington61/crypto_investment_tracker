@@ -4,7 +4,7 @@ import { getCurrenciesNames } from "../../actions/aux";
 import TotalChartDiagramm from "./TotalChartDiagramm";
 import { useLocation } from "react-router-dom";
 
-function TotalChart({ user, logedin }) {
+function TotalChart({ user, cryptoCurrencies, logedin }) {
   const data = useLocation();
 
   const [marketCharts, setMarketCharts] = useState({});
@@ -12,8 +12,18 @@ function TotalChart({ user, logedin }) {
 
   useEffect(() => {
     const updateState = async () => {
-      if (logedin) {
+      if (logedin && cryptoCurrencies.data) {
         let currenciesObject = {};
+
+        // getCryptoCurrentDataObj() retrieves currency object from props.cryptoCurrencies
+        // the price attribute in this object is passed as parameter to getMarketChartsCrypto()
+        const getCryptoCurrentDataObj = (currency) => {
+          let currencyObj = {};
+          cryptoCurrencies.data.forEach((obj) => {
+            if (obj.id === currency) currencyObj = obj;
+          });
+          return currencyObj;
+        };
 
         const earliestDate = getEarliestPurchaseDate();
         const currencyNamesArr = getCurrenciesNames(user);
@@ -21,6 +31,7 @@ function TotalChart({ user, logedin }) {
           const res = await getMarketChartsCrypto(
             user,
             currencyName,
+            getCryptoCurrentDataObj(currencyName).current_price,
             earliestDate
           );
           currenciesObject[currencyName] = res;
@@ -45,7 +56,7 @@ function TotalChart({ user, logedin }) {
     };
 
     updateState();
-  }, [user, logedin]);
+  }, [user, cryptoCurrencies, logedin]);
 
   return !loaded ? (
     <div>Loading ...</div>

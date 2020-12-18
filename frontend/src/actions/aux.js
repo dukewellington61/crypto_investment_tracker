@@ -118,7 +118,7 @@ export const cumulativeValueInvestment = (positions, marketChart, currency) => {
         initialValueArr[index] = array1[2];
         balanceArr[index] = currentValueArr[index] - initialValueArr[index];
         roiArr[index] =
-          100 - (initialValueArr[index] * 100) / currentValueArr[index];
+          (currentValueArr[index] * 100) / initialValueArr[index] - 100;
       }
     });
   });
@@ -133,7 +133,7 @@ export const cumulativeValueInvestment = (positions, marketChart, currency) => {
 };
 
 // returns duration in days -> from date of first purchase currency until now
-// duration is beeing used in conditional to make sure that x-axis doesn't have too many timestamps
+// duration is beeing used in conditional to make sure that x-axis doesn't have too many timestamps (granularity of data returned by API)
 const checkDuration = (marketChart) =>
   (marketChart[marketChart.length - 1][0] - marketChart[0][0]) /
   1000 /

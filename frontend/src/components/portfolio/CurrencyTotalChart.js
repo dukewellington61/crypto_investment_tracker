@@ -4,7 +4,7 @@ import { cumulativeValueInvestment } from "../../actions/aux";
 import CurrencyTotalChartDiagram from "./CurrencyTotalChartDiagram";
 import { useLocation } from "react-router-dom";
 
-const CurrencyTotalChart = ({ user, logedin }) => {
+const CurrencyTotalChart = ({ user, cryptoCurrencies, logedin }) => {
   const currency = sessionStorage.getItem("crypto_currency");
 
   const data = useLocation();
@@ -15,8 +15,22 @@ const CurrencyTotalChart = ({ user, logedin }) => {
 
   useEffect(() => {
     const updateState = async () => {
-      if (logedin) {
-        const chartData = await getMarketChartsCrypto(user, currency);
+      if (logedin && cryptoCurrencies.data) {
+        // getCryptoCurrentDataObj() retrieves currency object from props.cryptoCurrencies
+        // the price attribute in this object is passed as parameter to getMarketChartsCrypto()
+        const getCryptoCurrentDataObj = (currency) => {
+          let currencyObj = {};
+          cryptoCurrencies.data.forEach((obj) => {
+            if (obj.id === currency) currencyObj = obj;
+          });
+          return currencyObj;
+        };
+
+        const chartData = await getMarketChartsCrypto(
+          user,
+          currency,
+          getCryptoCurrentDataObj(currency).current_price
+        );
         setMarketChart(chartData);
 
         setCurrencyTotal(
@@ -26,9 +40,7 @@ const CurrencyTotalChart = ({ user, logedin }) => {
     };
 
     updateState();
-  }, [user, logedin]);
-
-  useEffect(() => {}, [marketChart]);
+  }, [user, cryptoCurrencies, logedin]);
 
   return marketChart.length === 0 ? (
     <div>Loading ...</div>

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getCryptoCurriencies = async (currencyNamesArr) => {
+export const getLatestCryptoPrice = async (currencyNamesArr) => {
   const currencyNamesString = await getNameString(currencyNamesArr);
 
   const urlString = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=${currencyNamesString}b&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
@@ -28,8 +28,6 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
 
   const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
 
-  // console.log(urlString);
-
   try {
     const res = await axios.get(urlString);
 
@@ -39,11 +37,15 @@ export const getMarketCharts = async (currency, date_of_purchase) => {
   }
 };
 
-export const getMarketChartsCrypto = async (user, currency, earliestDate) => {
+export const getMarketChartsCrypto = async (
+  user,
+  currency,
+  current_price,
+  earliestDate
+) => {
   // CoinGecko API V3 has granularity of Hourly data for duration between 1 day and 90 days - that's too much data
   // in order to get  Daily data the follwing three const from... make sure the duration is always at least 91 days
   // ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled **
-
   const fromDatePositions = earliestDate
     ? new Date(earliestDate).getTime() / 1000
     : new Date(await getFromDate(user, currency)).getTime() / 1000;
@@ -63,11 +65,21 @@ export const getMarketChartsCrypto = async (user, currency, earliestDate) => {
   const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
 
   try {
-    const res = await axios.get(urlString);
+    const dataSequence = await axios.get(urlString);
 
-    const resTransformed = await addDateToArr(res.data.prices);
+    // replaces the last price in the array with the most recent price so the last data point in @compontnens/layout/CurrencyTotalChart.js and TotalChart.js
+    // are always up to date
+    dataSequence.data.prices[
+      dataSequence.data.prices.length - 1
+    ][1] = current_price;
 
-    return resTransformed;
+    const dataSequenceTransformed = await addDateToArr(
+      dataSequence.data.prices
+    );
+
+    console.log(dataSequenceTransformed);
+
+    return dataSequenceTransformed;
   } catch (err) {
     return err;
   }

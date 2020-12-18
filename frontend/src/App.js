@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { getUser } from "./actions/user";
 import { register } from "./actions/auth";
 import { createPosition } from "./actions/positions";
+import { getCurrenciesNames } from "./actions/aux";
+import { getLatestCryptoPrice } from "./actions/currencies";
 
 import Navbar from "./components/navbar/Navbar";
 import Landing from "./components/layout/Landing";
@@ -30,11 +32,24 @@ const App = () => {
 
   const [alert, setAlert] = useState({});
 
-  console.log("App.js");
+  const [cryptoCurrencies, setCryptoCurrencies] = useState({});
 
   useEffect(() => {
     loadUser();
   }, []);
+
+  useEffect(() => {
+    async function updateState() {
+      if (logedin) {
+        const currencyNames = getCurrenciesNames(user);
+
+        const crypto = await getLatestCryptoPrice(currencyNames);
+
+        setCryptoCurrencies(crypto);
+      }
+    }
+    updateState();
+  }, [logedin]);
 
   const signin = async (email, password) => {
     const returnValue = await login(email, password);
@@ -114,7 +129,13 @@ const App = () => {
           <Route
             exact
             path="/"
-            render={() => <Landing user={user} logedin={logedin} />}
+            render={() => (
+              <Landing
+                user={user}
+                cryptoCurrencies={cryptoCurrencies}
+                logedin={logedin}
+              />
+            )}
           />
           <Route exact path="/position" render={() => <Position />} />
           <Route
@@ -125,12 +146,24 @@ const App = () => {
           <Route
             exact
             path="/currency_total_chart"
-            render={() => <CurrencyTotalChart user={user} logedin={logedin} />}
+            render={() => (
+              <CurrencyTotalChart
+                user={user}
+                cryptoCurrencies={cryptoCurrencies}
+                logedin={logedin}
+              />
+            )}
           />
           <Route
             exact
             path="/total_chart"
-            render={() => <TotalChart user={user} logedin={logedin} />}
+            render={() => (
+              <TotalChart
+                user={user}
+                cryptoCurrencies={cryptoCurrencies}
+                logedin={logedin}
+              />
+            )}
           />
           <Route
             exact
