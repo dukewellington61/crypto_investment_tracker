@@ -41,33 +41,49 @@ export const getMarketChartsCrypto = async (
   user,
   currency,
   current_price,
-  earliestDate
+  duration
 ) => {
-  // CoinGecko API V3 has granularity of Hourly data for duration between 1 day and 90 days - that's too much data
-  // in order to get  Daily data the follwing three const from... make sure the duration is always at least 91 days
-  // ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled ** temporarily disabled **
-  const fromDatePositions = earliestDate
-    ? new Date(earliestDate).getTime() / 1000
-    : new Date(await getFromDate(user, currency)).getTime() / 1000;
+  let from = null;
+  let date = null;
 
-  // const fromDate91DaysBeforeToday =
-  //   new Date().getTime() / 1000 - 91 * 24 * 60 * 60;
-
-  // const from =
-  //   fromDate91DaysBeforeToday < fromDatePositions
-  //     ? fromDate91DaysBeforeToday
-  //     : fromDatePositions;
-
-  const from = fromDatePositions;
+  switch (duration) {
+    case "day":
+      date = new Date();
+      date.setDate(date.getDate() - 1);
+      from = date / 1000;
+      break;
+    case "week":
+      date = new Date();
+      date.setDate(date.getDate() - 7);
+      from = date / 1000;
+      break;
+    case "month":
+      date = new Date();
+      date.setDate(date.getDate() - 30);
+      from = date / 1000;
+      break;
+    case "all_currency":
+      from = new Date(await getFromDate(user, currency)).getTime() / 1000;
+      break;
+    case "all_total":
+      const res = user.positions.sort(
+        (a, b) =>
+          Date.parse(a.date_of_purchase) - Date.parse(b.date_of_purchase)
+      );
+      from = new Date(res[0].date_of_purchase).getTime() / 1000;
+      break;
+  }
 
   const to = new Date().getTime() / 1000;
 
   const urlString = `https://api.coingecko.com/api/v3/coins/${currency}/market_chart/range?vs_currency=eur&from=${from}&to=${to}`;
 
-  try {
-    const dataSequence = await axios.get(urlString);
+  const proxyurl = "https://cors-anywhere.herokuapp.com/";
 
-    // replaces the last price in the array with the most recent price so the last data point in @compontnens/layout/CurrencyTotalChart.js and TotalChart.js
+  try {
+    const dataSequence = await axios.get(proxyurl + urlString);
+
+    // replaces the last price in the array with the most recent price so the last data point in @components/layout/CurrencyTotalChart.js and TotalChart.js
     // are always up to date
     dataSequence.data.prices[
       dataSequence.data.prices.length - 1
@@ -77,11 +93,31 @@ export const getMarketChartsCrypto = async (
       dataSequence.data.prices
     );
 
-    console.log(dataSequenceTransformed);
+    // console.log(dataSequenceTransformed.length);
 
-    return dataSequenceTransformed;
-  } catch (err) {
-    return err;
+    let returnValue = "";
+
+    switch (duration) {
+      case "day":
+        returnValue = dataSequenceTransformed.slice(0, 260);
+        break;
+      case "week":
+        returnValue = dataSequenceTransformed.slice(0, 165);
+        break;
+      case "month":
+        returnValue = dataSequenceTransformed.slice(0, 720);
+        break;
+      case "all_currency":
+        returnValue = dataSequenceTransformed;
+        break;
+      case "all_total":
+        returnValue = dataSequenceTransformed;
+        break;
+    }
+
+    return returnValue;
+  } catch (error) {
+    return error;
   }
 };
 

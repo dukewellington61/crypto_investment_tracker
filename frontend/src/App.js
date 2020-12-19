@@ -120,6 +120,14 @@ const App = () => {
     }
   };
 
+  const triggerAlert = (msg) => {
+    setAlert({
+      message: msg,
+      type: "danger",
+    });
+    setTimeout(() => setAlert({}), 5000);
+  };
+
   return (
     <Router>
       <Fragment>
@@ -162,6 +170,7 @@ const App = () => {
                 user={user}
                 cryptoCurrencies={cryptoCurrencies}
                 logedin={logedin}
+                triggerAlert={triggerAlert}
               />
             )}
           />

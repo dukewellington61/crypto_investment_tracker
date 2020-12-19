@@ -26,10 +26,13 @@ const CurrencyTotalChart = ({ user, cryptoCurrencies, logedin }) => {
           return currencyObj;
         };
 
+        const fromdate = "all_currency";
+
         const chartData = await getMarketChartsCrypto(
           user,
           currency,
-          getCryptoCurrentDataObj(currency).current_price
+          getCryptoCurrentDataObj(currency).current_price,
+          fromdate
         );
         setMarketChart(chartData);
 

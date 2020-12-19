@@ -8,7 +8,7 @@ total roi is beeing calculated correctly
 however:
 after midnight for a few hours (apparently) the data arrays as returned from the api that are beeing used to display development over time of
 current_value, balance and roi don't have the same length 
-the one for Etherem is one element shorter than the others 
+the one for Ethereum is one element shorter than the others 
 so when calculating the last value in the arrays of afore mentioned attributes the value for ETH is not yet available and therefore the last total value is too low
 
 2:14 am the above mentioned phenomena has stopped and everything looks ok
