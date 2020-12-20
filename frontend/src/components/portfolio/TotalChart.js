@@ -14,42 +14,31 @@ function TotalChart({ user, cryptoCurrencies, logedin, triggerAlert }) {
   useEffect(() => {
     let currenciesObject = {};
     const currencyNamesArr = getCurrenciesNames(user);
-    if (duration) {
-      currencyNamesArr.forEach(async (currencyName) => {
-        const res = await getMarketChartsCrypto(
-          user,
-          currencyName,
-          getCryptoCurrentDataObj(currencyName).current_price,
-          duration
-        );
-        if (res instanceof Error) {
-          const msg = "api call failed";
-          triggerAlert(msg);
-        } else {
-          currenciesObject[currencyName] = res;
-        }
 
-        if (Object.keys(currenciesObject).length === currencyNamesArr.length) {
-          setMarketCharts(currenciesObject);
-          setLoaded(true);
-        }
-      });
-    }
-  }, [user, cryptoCurrencies, logedin, duration]);
+    currencyNamesArr.forEach(async (currencyName) => {
+      const res = await getMarketChartsCrypto(
+        user,
+        currencyName,
+        marketCharts.current_price,
+        duration
+      );
+      if (res instanceof Error) {
+        console.log(res.response.data);
+        // const msg = "api call failed";
+        triggerAlert(res.response.data);
+      } else {
+        currenciesObject[currencyName] = res;
+      }
 
-  // getCryptoCurrentDataObj() retrieves currency object from props.cryptoCurrencies
-  // the price attribute in this object is passed as parameter to getMarketChartsCrypto()
-  const getCryptoCurrentDataObj = (currency) => {
-    let currencyObj = {};
-    if (cryptoCurrencies) {
-      cryptoCurrencies.data.forEach((obj) => {
-        if (obj.id === currency) currencyObj = obj;
-      });
-      return currencyObj;
-    }
-  };
+      // if (Object.keys(currenciesObject).length === currencyNamesArr.length) {
+      setMarketCharts(currenciesObject);
+      setLoaded(true);
+      // }
+    });
+  }, [user, cryptoCurrencies, logedin]);
 
   const setDurationState = (val) => {
+    // console.log(marketCharts);
     setDuration(val);
   };
 
@@ -57,11 +46,35 @@ function TotalChart({ user, cryptoCurrencies, logedin, triggerAlert }) {
     <div>Loading ...</div>
   ) : (
     <Fragment>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
-        <div onClick={() => setDurationState("day")}>day</div>
-        <div onClick={() => setDurationState("week")}>week</div>
-        <div onClick={() => setDurationState("month")}>month</div>
-        <div onClick={() => setDurationState("all_total")}>all</div>
+      <div id="durations_container">
+        <div
+          id={duration === "day" && "duration"}
+          className="durations"
+          onClick={() => setDurationState("day")}
+        >
+          day
+        </div>
+        <div
+          id={duration === "week" && "duration"}
+          className="durations"
+          onClick={() => setDurationState("week")}
+        >
+          week
+        </div>
+        <div
+          id={duration === "month" && "duration"}
+          className="durations"
+          onClick={() => setDurationState("month")}
+        >
+          month
+        </div>
+        <div
+          id={duration === "all_total" && "duration"}
+          className="durations"
+          onClick={() => setDurationState("all_total")}
+        >
+          all
+        </div>
       </div>
       <div>
         <TotalChartDiagramm

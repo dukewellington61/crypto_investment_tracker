@@ -125,14 +125,16 @@ const App = () => {
       message: msg,
       type: "danger",
     });
-    setTimeout(() => setAlert({}), 5000);
+    // setTimeout(() => setAlert({}), 10000);
   };
+
+  const removeAlert = () => setAlert({});
 
   return (
     <Router>
       <Fragment>
         <Navbar signout={signout} logedin={logedin} />
-        <Alert alert={alert} />
+        <Alert alert={alert} removeAlert={removeAlert} />
         <Switch>
           <Route
             exact

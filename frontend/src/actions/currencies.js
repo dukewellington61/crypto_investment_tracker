@@ -43,6 +43,7 @@ export const getMarketChartsCrypto = async (
   current_price,
   duration
 ) => {
+  console.log("getMarketChartsCrypto");
   let from = null;
   let date = null;
 
@@ -89,11 +90,9 @@ export const getMarketChartsCrypto = async (
       dataSequence.data.prices.length - 1
     ][1] = current_price;
 
-    const dataSequenceTransformed = await addDateToArr(
-      dataSequence.data.prices
-    );
+    const dataSequenceTransformed = addDateToArr(dataSequence.data.prices);
 
-    // console.log(dataSequenceTransformed.length);
+    console.log(dataSequenceTransformed);
 
     let returnValue = "";
 

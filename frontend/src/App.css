@@ -186,9 +186,38 @@
   margin: 1rem;
 }
 
-/* components/portfolio/PositionRoiChartDiagram.js */
-canvas {
-  width: 80% !important;
+/* @components/portfolio/TotalChart.js */
 
-  margin: 0 auto;
+#durations_container {
+  display: flex;
+  justify-content: space-around;
+  color: gray;
+  font-size: 0.85em;
+}
+
+#duration {
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+  font-size: 1.25em;
+}
+
+.durations {
+  cursor: pointer;
+}
+
+.durations:hover {
+  cursor: pointer;
+  color: black;
+  font-weight: bold;
+}
+
+/* @/components/layout/Alert.js */
+#remove_alert {
+  position: absolute;
+  right: 0.5rem;
+  top: 0;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
 }
