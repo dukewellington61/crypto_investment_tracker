@@ -1,5 +1,5 @@
 import React, { useEffect, Fragment } from "react";
-import { getCurrencyPositions } from "../../actions/aux";
+import { getCurrencyPositions } from "../../aux/auxCryptoData";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 

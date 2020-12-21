@@ -187,6 +187,17 @@
 }
 
 /* @components/portfolio/TotalChart.js */
+#total_chart_container {
+  position: relative;
+}
+
+#toggle_view {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 #durations_container {
   display: flex;

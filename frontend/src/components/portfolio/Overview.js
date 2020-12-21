@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { getNamesAndValues } from "../../actions/aux";
-import { getAmount } from "../../actions/aux";
-import { getCurrentPrice } from "../../actions/aux";
-import { getCurrentValue } from "../../actions/aux";
+import { getNamesAndValues } from "../../aux/auxCryptoData";
+import { getAmount } from "../../aux/auxCryptoData";
+import { getCurrentPrice } from "../../aux/auxCryptoData";
+import { getCurrentValue } from "../../aux/auxCryptoData";
 
-const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
+const Overview = ({
+  user,
+  cryptoCurrencies,
+  logedin,
+  toggleView,
+  renderOverview,
+  updateOriginState,
+}) => {
   const [currencyNamesAndValues, setCurrencyNamesAndValues] = useState([]);
 
   const [currentValueTotal, setCurrentValueTotal] = useState(0);
@@ -13,20 +20,18 @@ const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
   const [totalPurchase, setTotalPurchase] = useState(0);
 
   useEffect(() => {
-    const res = getNamesAndValues(user, cryptoCurrencies);
+    const namesAndValuesArr = getNamesAndValues(user, cryptoCurrencies);
 
-    setCurrencyNamesAndValues(res);
+    setCurrencyNamesAndValues(namesAndValuesArr);
 
-    let totalsArray = [];
-
-    totalsArray = currencyNamesAndValues.map((el) =>
+    const totalsArray = namesAndValuesArr.map((el) =>
       getCurrentValue(user, cryptoCurrencies, el[0])
     );
 
     setCurrentValueTotal(totalsArray.reduce((a, b) => a + b, 0));
 
     setTotalPurchase(getTotalPurchase());
-  }, [user, cryptoCurrencies, logedin, re_render]);
+  }, [user, cryptoCurrencies, logedin, renderOverview]);
 
   const getTotal = (currency) => {
     let sum = 0;
@@ -54,6 +59,11 @@ const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
     } else {
       sessionStorage.setItem("crypto_currency", currency);
     }
+  };
+
+  const handleClick = (val) => {
+    toggleView();
+    updateOriginState(val);
   };
 
   return (
@@ -85,66 +95,26 @@ const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
                 >
                   <th scope="row">{el[0]}</th>
                 </Link>
-
-                <td>{getAmount(user, el[0]).toFixed(3)}</td>
-                <td>
-                  <Link
-                    to={{
-                      pathname: "/currency_total_chart",
-                      state: {
-                        origin: "initialInvestment",
-                      },
-                    }}
-                    onClick={() => setCurrency(el[0])}
-                  >
-                    {getTotal(el[0]).toFixed(2)}&euro;
-                  </Link>
+                <td onClick={handleClick}>
+                  {getAmount(user, el[0]).toFixed(3)}
                 </td>
-                <td>
-                  <Link
-                    to={{
-                      pathname: "/currency_total_chart",
-                      state: {
-                        origin: "currentValue",
-                      },
-                    }}
-                    onClick={() => setCurrency(el[0])}
-                  >
-                    {getCurrentValue(user, cryptoCurrencies, el[0]).toFixed(2)}
-                    &euro;
-                  </Link>
+                <td onClick={handleClick}>
+                  {getTotal(el[0]).toFixed(2)}&euro;
                 </td>
-                <td>
-                  {" "}
-                  <Link
-                    to={{
-                      pathname: "/currency_total_chart",
-                      state: {
-                        origin: "balance",
-                      },
-                    }}
-                    onClick={() => setCurrency(el[0])}
-                  >
-                    {getBalance(el[0]).toFixed(2)}&euro;
-                  </Link>
+                <td onClick={handleClick}>
+                  {getCurrentValue(user, cryptoCurrencies, el[0]).toFixed(2)}
+                  &euro;
                 </td>
-                <td>
-                  <Link
-                    to={{
-                      pathname: "/currency_total_chart",
-                      state: {
-                        origin: "roi",
-                      },
-                    }}
-                    onClick={() => setCurrency(el[0])}
-                  >
-                    {(
-                      (getCurrentValue(user, cryptoCurrencies, el[0]) * 100) /
-                        getTotal(el[0]) -
-                      100
-                    ).toFixed(0)}
-                    %
-                  </Link>
+                <td onClick={handleClick}>
+                  {getBalance(el[0]).toFixed(2)}&euro;
+                </td>
+                <td onClick={handleClick}>
+                  {(
+                    (getCurrentValue(user, cryptoCurrencies, el[0]) * 100) /
+                      getTotal(el[0]) -
+                    100
+                  ).toFixed(0)}
+                  %
                 </td>
               </tr>
             ))}
@@ -152,55 +122,17 @@ const Overview = ({ user, cryptoCurrencies, logedin, re_render }) => {
         <tr>
           <th scope="row"></th>
           <td></td>
-          <td>
-            {" "}
-            <Link
-              to={{
-                pathname: "/total_chart",
-                state: {
-                  origin: "total_initial_value",
-                },
-              }}
-            >
-              {totalPurchase.toFixed(2)}&euro;
-            </Link>
+          <td onClick={() => handleClick("total_initial_value")}>
+            {totalPurchase.toFixed(2)}&euro;
           </td>
-          <td>
-            <Link
-              to={{
-                pathname: "/total_chart",
-                state: {
-                  origin: "total_current_value",
-                },
-              }}
-            >
-              {currentValueTotal.toFixed(2)}&euro;
-            </Link>
+          <td onClick={() => handleClick("total_current_value")}>
+            {currentValueTotal.toFixed(2)}&euro;
           </td>
-          <td>
-            {" "}
-            <Link
-              to={{
-                pathname: "/total_chart",
-                state: {
-                  origin: "total_balance",
-                },
-              }}
-            >
-              {(currentValueTotal - totalPurchase).toFixed(2)}&euro;
-            </Link>
+          <td onClick={() => handleClick("total_balance")}>
+            {(currentValueTotal - totalPurchase).toFixed(2)}&euro;
           </td>
-          <td>
-            <Link
-              to={{
-                pathname: "/total_chart",
-                state: {
-                  origin: "total_roi",
-                },
-              }}
-            >
-              {((currentValueTotal * 100) / totalPurchase - 100).toFixed(0)}%
-            </Link>
+          <td onClick={() => handleClick("total_roi")}>
+            {((currentValueTotal * 100) / totalPurchase - 100).toFixed(0)}%
           </td>
         </tr>
       </table>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
-import { cumulativeValueInvestment } from "../../actions/aux";
+import { cumulativeValueInvestment } from "../../aux/auxCryptoData";
 
 function TotalChartDiagramm({
   positions,
@@ -9,9 +9,6 @@ function TotalChartDiagramm({
   origin,
   duration,
 }) {
-  // console.log("marketCharts");
-  // console.log(marketCharts);
-
   const [nameArray, setNameArray] = useState("");
 
   const [labelStr, setLabelStr] = useState("");
@@ -42,7 +39,6 @@ function TotalChartDiagramm({
   }, []);
 
   useEffect(() => {
-    // console.log("useEffect");
     const currenciesTotalObjectsArray = [];
 
     const timeStamps = [];
@@ -88,14 +84,6 @@ function TotalChartDiagramm({
         }
       });
     }
-
-    // console.log(marketCharts);
-
-    // console.log("arrays");
-
-    // console.log(resArray);
-
-    // console.log(timeStamps);
 
     setResultArray(resArray);
 

@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export const getLatestCryptoPrice = async (currencyNamesArr) => {
+  console.log("getLatestCryptoPrice() @currencies.js");
   const currencyNamesString = await getNameString(currencyNamesArr);
 
   const urlString = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=eur&ids=${currencyNamesString}b&order=market_cap_desc&per_page=100&page=1&sparkline=false`;
@@ -23,6 +24,7 @@ const getNameString = async (currencyNamesArr) => {
 };
 
 export const getMarketCharts = async (currency, date_of_purchase) => {
+  console.log("getMarketCharts() @currencies.js");
   const from = new Date(date_of_purchase).getTime() / 1000;
   const to = new Date().getTime() / 1000;
 
@@ -43,7 +45,7 @@ export const getMarketChartsCrypto = async (
   current_price,
   duration
 ) => {
-  console.log("getMarketChartsCrypto");
+  console.log("getMarketChartsCrypto() @currencies.js");
   let from = null;
   let date = null;
 

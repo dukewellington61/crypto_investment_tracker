@@ -4,14 +4,11 @@ import { Link } from "react-router-dom";
 // import { logout } from "../../../../../MERN webshop/client/src/actions/auth";
 // import { connect } from "react-redux";
 
-const Menu = ({ logedin, signout }) => {
-  const handleClick = () => {
-    signout();
-  };
-
+const Menu = ({ logedin, logout }) => {
+  console.log(logedin);
   return logedin ? (
     <div id="navbar_menu">
-      <Link className="navbar_menu_text" to="/" onClick={handleClick}>
+      <Link className="navbar_menu_text" to="/" onClick={() => logout()}>
         <i className="fas fa-sign-out-alt"></i> Logout
       </Link>
     </div>

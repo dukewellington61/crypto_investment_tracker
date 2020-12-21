@@ -49,3 +49,5 @@ on click total Purchased for / Current Value / Balance / ROI set useState so eit
 said useState has 'total_initial_value', 'total_current_value' etc. so switch in TotalChartDiagramm.js knows which data array is to be used for diagram
 
 that means a lot of extra code in Overview.js --> in order not to clutter up too much move some of the functions to aux.js
+
+check out in how far useContext hook can help: useContext only helps avoid passing props through many components in a tree, that's all. So it doesn't help.

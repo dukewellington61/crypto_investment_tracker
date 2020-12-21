@@ -33,6 +33,7 @@ export const getCurrentValue = (user, cryptoCurrencies, currencyName) => {
   const currentPrice = getCurrentPrice(cryptoCurrencies, currencyName);
   const amount = getAmount(user, currencyName);
   const getCurrentValue = currentPrice * amount;
+  // console.log(getCurrentValue);
   return getCurrentValue;
 };
 

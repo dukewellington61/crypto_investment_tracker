@@ -1,52 +1,30 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { getMarketChartsCrypto } from "../../actions/currencies";
-import { getCurrenciesNames } from "../../actions/aux";
+import React from "react";
+
 import TotalChartDiagramm from "./TotalChartDiagramm";
-import { useLocation } from "react-router-dom";
 
-function TotalChart({ user, cryptoCurrencies, logedin, triggerAlert }) {
-  const data = useLocation();
+function TotalChart({
+  user,
+  marketCharts,
+  toggleView,
+  origin,
+  loaded,
+  duration,
+}) {
+  // const setDurationState = (val) => {
+  //   setDuration(val);
+  // };
 
-  const [marketCharts, setMarketCharts] = useState({});
-  const [loaded, setLoaded] = useState(false);
-  const [duration, setDuration] = useState("all_total");
-
-  useEffect(() => {
-    let currenciesObject = {};
-    const currencyNamesArr = getCurrenciesNames(user);
-
-    currencyNamesArr.forEach(async (currencyName) => {
-      const res = await getMarketChartsCrypto(
-        user,
-        currencyName,
-        marketCharts.current_price,
-        duration
-      );
-      if (res instanceof Error) {
-        console.log(res.response.data);
-        // const msg = "api call failed";
-        triggerAlert(res.response.data);
-      } else {
-        currenciesObject[currencyName] = res;
-      }
-
-      // if (Object.keys(currenciesObject).length === currencyNamesArr.length) {
-      setMarketCharts(currenciesObject);
-      setLoaded(true);
-      // }
-    });
-  }, [user, cryptoCurrencies, logedin]);
-
-  const setDurationState = (val) => {
-    // console.log(marketCharts);
-    setDuration(val);
-  };
+  console.log("marketCharts @TotalCharts.js");
+  console.log(marketCharts);
 
   return !loaded ? (
     <div>Loading ...</div>
   ) : (
-    <Fragment>
-      <div id="durations_container">
+    <div id="total_chart_container">
+      <div id="toggle_view" onClick={toggleView}>
+        go back
+      </div>
+      {/* <div id="durations_container">
         <div
           id={duration === "day" && "duration"}
           className="durations"
@@ -75,17 +53,17 @@ function TotalChart({ user, cryptoCurrencies, logedin, triggerAlert }) {
         >
           all
         </div>
-      </div>
+      </div> */}
       <div>
         <TotalChartDiagramm
           marketCharts={marketCharts}
           positions={user.positions}
           fiat={user.positions[0].fiat_currency}
-          origin={data.state.origin}
+          origin={origin}
           duration={duration}
         />
       </div>
-    </Fragment>
+    </div>
   );
 }
 

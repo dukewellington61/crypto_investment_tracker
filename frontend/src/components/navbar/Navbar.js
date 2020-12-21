@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import AccountIcon from "./AccountIcon";
 
-const Navbar = ({ signout, logedin }) => {
+const Navbar = ({ logout, logedin }) => {
   return (
     <nav id="navbar">
       <div id="brand_container">
@@ -24,7 +24,7 @@ const Navbar = ({ signout, logedin }) => {
         )}
 
         <Link className="nav_items" to="#">
-          <AccountIcon signout={signout} logedin={logedin} />
+          <AccountIcon logout={logout} logedin={logedin} />
         </Link>
       </div>
     </nav>

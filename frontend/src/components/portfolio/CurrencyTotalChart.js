@@ -1,6 +1,6 @@
 import React, { Fragment, useState, useEffect } from "react";
 import { getMarketChartsCrypto } from "../../actions/currencies";
-import { cumulativeValueInvestment } from "../../actions/aux";
+import { cumulativeValueInvestment } from "../../aux/auxCryptoData";
 import CurrencyTotalChartDiagram from "./CurrencyTotalChartDiagram";
 import { useLocation } from "react-router-dom";
 
