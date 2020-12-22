@@ -51,3 +51,11 @@ said useState has 'total_initial_value', 'total_current_value' etc. so switch in
 that means a lot of extra code in Overview.js --> in order not to clutter up too much move some of the functions to aux.js
 
 check out in how far useContext hook can help: useContext only helps avoid passing props through many components in a tree, that's all. So it doesn't help.
+
+problems:
+
+coingecko api limited amount of calls
+
+why so many network requests?
+
+console.log. --> why never on start app and browser reload?

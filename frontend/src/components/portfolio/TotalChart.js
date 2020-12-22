@@ -14,8 +14,8 @@ function TotalChart({
   //   setDuration(val);
   // };
 
-  console.log("marketCharts @TotalCharts.js");
-  console.log(marketCharts);
+  // console.log("marketCharts @TotalCharts.js");
+  // console.log(marketCharts);
 
   return !loaded ? (
     <div>Loading ...</div>

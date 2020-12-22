@@ -94,8 +94,6 @@ export const getMarketChartsCrypto = async (
 
     const dataSequenceTransformed = addDateToArr(dataSequence.data.prices);
 
-    console.log(dataSequenceTransformed);
-
     let returnValue = "";
 
     switch (duration) {

@@ -39,17 +39,28 @@ function Landing({ user, cryptoCurrencies, logedin, triggerAlert }) {
         duration
       );
       if (res instanceof Error) {
-        // triggerAlert("an error has occured while loading data");
-        triggerAlert(res.response.data);
-        // this makes sure that currenciesObject only gets attributes if no error occurs so those attributes are proper arrays
-        // otherwhise attributes are non iterable error objects -> a arr.forEach() will throw an exception and break the app
-        // if api returns errors currenciesObject (and therefore marketCharts) remains an empty object which merely results in
-        // an empty chart
-      } else currenciesObject[currencyName] = res;
+        triggerAlert("an error has occured while loading data");
+      } else {
+        currenciesObject[currencyName] = res;
+      }
     });
 
-    setMarketCharts(currenciesObject);
-    setLoaded(true);
+    let currenciesObjectFullyLoaded = true;
+
+    currencyNamesArr.forEach((currencyName) =>
+      currenciesObject.hasOwnProperty(currencyName)
+        ? null
+        : (currenciesObjectFullyLoaded = false)
+    );
+
+    console.log(currenciesObjectFullyLoaded);
+
+    if (currenciesObjectFullyLoaded === false) {
+      triggerAlert("data unavailable");
+    } else {
+      setMarketCharts(currenciesObject);
+      setLoaded(true);
+    }
   }, [user, cryptoCurrencies, logedin]);
 
   return (
